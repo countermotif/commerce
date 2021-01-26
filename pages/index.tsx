@@ -5,10 +5,10 @@ import { Grid, Marquee, Hero } from '@components/ui'
 import HomeAllProductsGrid from '@components/common/HomeAllProductsGrid'
 import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 
-import { getConfig } from '@framework/api'
-import getAllProducts from '@framework/api/operations/get-all-products'
-import getSiteInfo from '@framework/api/operations/get-site-info'
-import getAllPages from '@framework/api/operations/get-all-pages'
+import { getConfig } from '../framework/spree/api'
+import getAllProducts from '../framework/spree/api/operations/get-all-products'
+//import getSiteInfo from '@framework/api/operations/get-site-info'
+//import getAllPages from '@framework/api/operations/get-all-pages'
 
 export async function getStaticProps({
   preview,
@@ -37,8 +37,11 @@ export async function getStaticProps({
     preview,
   })
 
-  const { categories, brands } = await getSiteInfo({ config, preview })
-  const { pages } = await getAllPages({ config, preview })
+  const categories = ['test']
+  const brands = []
+  const pages = ['page1']
+  //const { categories, brands } = await getSiteInfo({ config, preview })
+  //const { pages } = await getAllPages({ config, preview })
 
   // These are the products that are going to be displayed in the landing.
   // We prefer to do the computation at buildtime/servertime
@@ -49,14 +52,8 @@ export async function getStaticProps({
     // products, then fill them with products from the products list, this
     // is useful for new commerce sites that don't have a lot of products
     return {
-      featured: rangeMap(6, (i) => featuredProducts[i] ?? products.shift())
-        .filter(nonNullable)
-        .sort((a, b) => a.node.prices.price.value - b.node.prices.price.value)
-        .reverse(),
-      bestSelling: rangeMap(
-        6,
-        (i) => bestSellingProducts[i] ?? products.shift()
-      ).filter(nonNullable),
+      featured: products,
+      bestSelling: []
     }
   })()
 
@@ -85,10 +82,10 @@ export default function Home({
   return (
     <div>
       <Grid>
-        {featured.slice(0, 3).map(({ node }, i) => (
+        {featured.slice(0, 3).map((product, i) => (
           <ProductCard
-            key={node.path}
-            product={node}
+            key={product.id}
+            product={product}
             imgWidth={i === 0 ? 1080 : 540}
             imgHeight={i === 0 ? 1080 : 540}
             imgPriority
@@ -96,18 +93,18 @@ export default function Home({
           />
         ))}
       </Grid>
-      <Marquee variant="secondary">
-        {bestSelling.slice(3, 6).map(({ node }) => (
+      {/* <Marquee variant="secondary">
+        {featured.slice(3, 6).map((product) => (
           <ProductCard
-            key={node.path}
-            product={node}
+            key={product.id}
+            product={product}
             variant="slim"
             imgWidth={320}
             imgHeight={320}
             imgLayout="fixed"
           />
         ))}
-      </Marquee>
+      </Marquee> */}
       <Hero
         headline="Release Details: The Yeezy BOOST 350 V2 ‘Natural'"
         description="
@@ -119,32 +116,27 @@ export default function Home({
         ‘Natural’."
       />
       <Grid layout="B">
-        {featured.slice(3, 6).map(({ node }, i) => (
+        {featured.slice(3, 6).map((product, i) => (
           <ProductCard
-            key={node.path}
-            product={node}
+            key={product.id}
+            product={product}
             imgWidth={i === 1 ? 1080 : 540}
             imgHeight={i === 1 ? 1080 : 540}
           />
         ))}
       </Grid>
-      <Marquee>
-        {bestSelling.slice(0, 3).map(({ node }) => (
+      {/* <Marquee>
+        {featured.slice(0, 3).map((product) => (
           <ProductCard
-            key={node.path}
-            product={node}
+            key={product.id}
+            product={product}
             variant="slim"
             imgWidth={320}
             imgHeight={320}
             imgLayout="fixed"
           />
         ))}
-      </Marquee>
-      <HomeAllProductsGrid
-        categories={categories}
-        brands={brands}
-        newestProducts={newestProducts}
-      />
+      </Marquee> */}
     </div>
   )
 }
