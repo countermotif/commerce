@@ -8,9 +8,9 @@ import { useUI } from '@components/ui/context'
 import { Swatch, ProductSlider } from '@components/product'
 import { Button, Container, Text } from '@components/ui'
 
-import usePrice from '@framework/use-price'
-import useAddItem from '@framework/cart/use-add-item'
-import type { ProductNode } from '@framework/api/operations/get-product'
+import usePrice from '../../../framework/spree/use-price'
+//import useAddItem from '../../../framework/spree/cart/use-add-item'
+import type { ProductNode } from '../../../framework/spree/api/operations/get-product'
 import {
   getCurrentVariant,
   getProductOptions,
@@ -25,14 +25,15 @@ interface Props {
 }
 
 const ProductView: FC<Props> = ({ product }) => {
-  const addItem = useAddItem()
+  //const addItem = useAddItem()
   const { price } = usePrice({
     amount: product.prices?.price?.value,
     baseAmount: product.prices?.retailPrice?.value,
     currencyCode: product.prices?.price?.currencyCode!,
   })
   const { openSidebar } = useUI()
-  const options = getProductOptions(product)
+  //const options = getProductOptions(product)
+  const options = []
   const [loading, setLoading] = useState(false)
   const [choices, setChoices] = useState<SelectedOptions>({
     size: null,
@@ -44,10 +45,10 @@ const ProductView: FC<Props> = ({ product }) => {
   const addToCart = async () => {
     setLoading(true)
     try {
-      await addItem({
-        productId: product.entityId,
-        variantId: product.variants.edges?.[0]?.node.entityId!,
-      })
+      //await addItem({
+      //  productId: product.entityId,
+      //  variantId: product.variants.edges?.[0]?.node.entityId!,
+      //})
       openSidebar()
       setLoading(false)
     } catch (err) {
@@ -66,7 +67,7 @@ const ProductView: FC<Props> = ({ product }) => {
           description: product.description,
           images: [
             {
-              url: product.images.edges?.[0]?.node.urlOriginal!,
+              url: product.masterVariant.images.edges?.[0]?.node.largeUrl!,
               width: 800,
               height: 600,
               alt: product.name,
@@ -87,12 +88,12 @@ const ProductView: FC<Props> = ({ product }) => {
 
           <div className={s.sliderContainer}>
             <ProductSlider key={product.entityId}>
-              {product.images.edges?.map((image, i) => (
-                <div key={image?.node.urlOriginal} className={s.imageContainer}>
+              {product.masterVariant.images.edges?.map((image, i) => (
+                <div key={image?.node.largeUrl} className={s.imageContainer}>
                   <Image
                     className={s.img}
-                    src={image?.node.urlOriginal!}
-                    alt={image?.node.altText || 'Product Image'}
+                    src={'http://localhost:5555/' + image?.node.largeUrl!}
+                    alt={image?.node.alt || 'Product Image'}
                     width={1050}
                     height={1050}
                     priority={i === 0}
@@ -155,7 +156,7 @@ const ProductView: FC<Props> = ({ product }) => {
 
         <WishlistButton
           className={s.wishlistButton}
-          productId={product.entityId}
+          productId={product.id}
           variant={product.variants.edges?.[0]!}
         />
       </div>

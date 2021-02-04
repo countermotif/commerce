@@ -9,10 +9,10 @@ import { ProductView } from '@components/product'
 
 // Data
 
-import { getConfig } from '@framework/api'
-import getProduct from '@framework/api/operations/get-product'
-import getAllPages from '@framework/api/operations/get-all-pages'
-import getAllProductPaths from '@framework/api/operations/get-all-product-paths'
+import { getConfig } from '../../framework/spree/api'
+import getProduct from '../../framework/spree/api/operations/get-product'
+//import getAllPages from '@framework/api/operations/get-all-pages'
+//import getAllProductPaths from '@framework/api/operations/get-all-product-paths'
 
 export async function getStaticProps({
   params,
@@ -21,7 +21,8 @@ export async function getStaticProps({
 }: GetStaticPropsContext<{ slug: string }>) {
   const config = getConfig({ locale })
 
-  const { pages } = await getAllPages({ config, preview })
+  //const { pages } = await getAllPages({ config, preview })
+  const { pages } = { pages: [] }
   const { product } = await getProduct({
     variables: { slug: params!.slug },
     config,
@@ -39,7 +40,8 @@ export async function getStaticProps({
 }
 
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
-  const { products } = await getAllProductPaths()
+  //const { products } = await getAllProductPaths()
+  const { products } = { products: [] }
 
   return {
     paths: locales
