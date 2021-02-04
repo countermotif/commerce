@@ -1,23 +1,23 @@
 {
   "schema": {
-    "https://buybutton.store/graphql": {
+    "http://localhost:5555/graphql": {
       "headers": {
-        "Authorization": "Bearer xzy"
+        "Authorization": "Bearer a09d82207f635d2fa1f3dd61e9cda01bbf34356b88680f98"
       }
     }
   },
   "documents": [
     {
-      "./framework/bigcommerce/api/**/*.ts": {
+      "./framework/spree/api/**/*.ts": {
         "noRequire": true
       }
     }
   ],
   "generates": {
-    "./framework/bigcommerce/schema.d.ts": {
+    "./framework/spree/schema.d.ts": {
       "plugins": ["typescript", "typescript-operations"]
     },
-    "./framework/bigcommerce/schema.graphql": {
+    "./framework/spree/schema.graphql": {
       "plugins": ["schema-ast"]
     }
   },

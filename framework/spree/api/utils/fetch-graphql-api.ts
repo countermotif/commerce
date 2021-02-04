@@ -2,13 +2,14 @@ import { FetcherError } from '@commerce/utils/errors'
 import type { GraphQLFetcher } from '@commerce/api'
 import { getConfig } from '..'
 import fetch from './fetch'
+import { Logger } from 'tslog'
 
 const fetchGraphqlApi: GraphQLFetcher = async (
   query: string,
   { variables, preview } = {},
   fetchOptions
 ) => {
-  // log.warn(query)
+  const log: Logger = new Logger();
   const config = getConfig()
   const res = await fetch(config.commerceUrl + (preview ? '/preview' : ''), {
     ...fetchOptions,
@@ -27,7 +28,7 @@ const fetchGraphqlApi: GraphQLFetcher = async (
   const json = await res.json()
   if (json.errors) {
     throw new FetcherError({
-      errors: json.errors ?? [{ message: 'Failed to fetch Bigcommerce API' }],
+      errors: json.errors ?? [{ message: 'Failed to fetch Solidus API' }],
       status: res.status,
     })
   }

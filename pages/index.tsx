@@ -37,11 +37,12 @@ export async function getStaticProps({
     preview,
   })
 
-  const categories = ['test']
-  const brands = []
-  const pages = ['page1']
   //const { categories, brands } = await getSiteInfo({ config, preview })
   //const { pages } = await getAllPages({ config, preview })
+
+  const categories = {}
+  const brands = {}
+  const pages = []
 
   // These are the products that are going to be displayed in the landing.
   // We prefer to do the computation at buildtime/servertime
@@ -52,8 +53,14 @@ export async function getStaticProps({
     // products, then fill them with products from the products list, this
     // is useful for new commerce sites that don't have a lot of products
     return {
-      featured: products,
-      bestSelling: []
+      featured: rangeMap(6, (i) => featuredProducts[i] ?? products.shift())
+        .filter(nonNullable)
+        .sort((a, b) => a.node.masterVariant.defaultPrice.amount - b.node.masterVariant.defaultPrice.amount)
+        .reverse(),
+      bestSelling: rangeMap(
+        6,
+        (i) => bestSellingProducts[i] ?? products.shift()
+      ).filter(nonNullable),
     }
   })()
 
@@ -82,10 +89,10 @@ export default function Home({
   return (
     <div>
       <Grid>
-        {featured.slice(0, 3).map((product, i) => (
+        {featured.slice(0, 3).map(({ node }, i) => (
           <ProductCard
-            key={product.id}
-            product={product}
+            key={node.slug}
+            product={node}
             imgWidth={i === 0 ? 1080 : 540}
             imgHeight={i === 0 ? 1080 : 540}
             imgPriority
@@ -93,18 +100,18 @@ export default function Home({
           />
         ))}
       </Grid>
-      {/* <Marquee variant="secondary">
-        {featured.slice(3, 6).map((product) => (
+      <Marquee variant="secondary">
+        {bestSelling.slice(3, 6).map(({ node }) => (
           <ProductCard
-            key={product.id}
-            product={product}
+            key={node.slug}
+            product={node}
             variant="slim"
             imgWidth={320}
             imgHeight={320}
             imgLayout="fixed"
           />
         ))}
-      </Marquee> */}
+      </Marquee>
       <Hero
         headline="Release Details: The Yeezy BOOST 350 V2 ‘Natural'"
         description="
@@ -116,27 +123,27 @@ export default function Home({
         ‘Natural’."
       />
       <Grid layout="B">
-        {featured.slice(3, 6).map((product, i) => (
+        {featured.slice(3, 6).map(({ node }, i) => (
           <ProductCard
-            key={product.id}
-            product={product}
+            key={node.slug}
+            product={node}
             imgWidth={i === 1 ? 1080 : 540}
             imgHeight={i === 1 ? 1080 : 540}
           />
         ))}
       </Grid>
-      {/* <Marquee>
-        {featured.slice(0, 3).map((product) => (
+      <Marquee>
+        {bestSelling.slice(0, 3).map(({ node }) => (
           <ProductCard
-            key={product.id}
-            product={product}
+            key={node.slug}
+            product={node}
             variant="slim"
             imgWidth={320}
             imgHeight={320}
             imgLayout="fixed"
           />
         ))}
-      </Marquee> */}
+      </Marquee>
     </div>
   )
 }

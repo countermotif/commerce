@@ -31,15 +31,15 @@ const ProductCard: FC<Props> = ({
   imgSizes,
   imgLayout = 'responsive',
 }) => {
-  const src = process.env.SPREE_STOREFRONT_API_URL + p.image[0]?.attributes?.styles?.slice(-1)[0].url!
+  const src = 'http://localhost:5555/' + p.masterVariant.images.edges?.[0]?.node?.largeUrl!
   const { price } = usePrice({
-    amount: parseFloat(p.attributes.price),
-    baseAmount: parseFloat(p.attributes.price),
-    currencyCode: p.attributes.currency,
+    amount: parseFloat(p.masterVariant.defaultPrice.amount),
+    baseAmount: parseFloat(p.masterVariant.defaultPrice.amount),
+    currencyCode: p.masterVariant.defaultPrice.currency.isoCode!,
   })
 
   return (
-    <Link href={`/product/${p.attributes.slug}`}>
+    <Link href={`/product/${p.slug}`}>
       <a
         className={cn(s.root, { [s.simple]: variant === 'simple' }, className)}
       >
@@ -58,8 +58,8 @@ const ProductCard: FC<Props> = ({
               layout={imgLayout}
               loading={imgLoading}
               priority={imgPriority}
-              src={process.env.SPREE_STOREFRONT_API_URL + p.image[0]?.attributes?.styles?.slice(-1)[0].url!}
-              alt={'Product Image'}
+              src={'http://localhost:5555/' + p.masterVariant.images.edges?.[0]?.node.largeUrl!}
+              alt={p.masterVariant.images.edges?.[0]?.node.alt || 'Product Image'}
             />
           </div>
         ) : (
@@ -68,14 +68,14 @@ const ProductCard: FC<Props> = ({
             <div className="flex flex-row justify-between box-border w-full z-20 absolute">
               <div className="absolute top-0 left-0 pr-16 max-w-full">
                 <h3 className={s.productTitle}>
-                  <span>{p.attributes.name}</span>
+                  <span>{p.name}</span>
                 </h3>
                 <span className={s.productPrice}>{price}</span>
               </div>
               <WishlistButton
                 className={s.wishlistButton}
-                productId={p.entityId}
-                variant={p.variant?.edges?.[0]!}
+                productId={p.id}
+                variant={p.variants.edges?.[0]!}
               />
             </div>
             <div className={s.imageContainer}>
