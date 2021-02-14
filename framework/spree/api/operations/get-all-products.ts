@@ -121,7 +121,7 @@ async function getAllProducts({
   const edges = data.currentStore?.[field]?.edges
   const products = filterEdges(edges as RecursiveRequired<typeof edges>)
 
-  log.warn(products)
+  // log.warn(products)
   //if (locale && config.applyLocale) {
   //  products.forEach((product: RecursivePartial<ProductEdge>) => {
   //    if (product.node) setProductLocaleMeta(product.node)

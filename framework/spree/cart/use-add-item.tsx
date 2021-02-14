@@ -6,7 +6,7 @@ import type { ItemBody, AddItemBody } from '../api/cart'
 import useCart, { Cart } from './use-cart'
 
 const defaultOpts = {
-  url: '/api/bigcommerce/cart',
+  url: '/api/spree/cart',
   method: 'POST',
 }
 
@@ -40,8 +40,11 @@ export function extendHook(customFetcher: typeof fetcher) {
 
     return useCallback(
       async function addItem(input: AddItemInput) {
+        console.log('w00t1')
         const data = await fn({ item: input })
+        console.log('w00t2')
         await mutate(data, false)
+        console.log('w00t2')
         return data
       },
       [fn, mutate]

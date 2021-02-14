@@ -12,14 +12,12 @@ export type ProductOption = {
 
 // Returns the available options of a product
 export function getProductOptions(product: ProductNode) {
-  const options = product.productOptions.edges?.reduce<ProductOption[]>(
+  const options = product.optionTypes.edges?.reduce<ProductOption[]>(
     (arr, edge) => {
-      if (edge?.node.__typename === 'MultipleChoiceOption') {
-        arr.push({
-          displayName: edge.node.displayName.toLowerCase(),
-          values: edge.node.values.edges?.map((edge) => edge?.node),
-        })
-      }
+      arr.push({
+        displayName: edge.node.presentation.toLowerCase(),
+        values: edge.node.optionValues.edges?.map((edge) => edge?.node),
+      })
       return arr
     },
     []
@@ -33,19 +31,18 @@ export function getCurrentVariant(product: ProductNode, opts: SelectedOptions) {
   const variant = product.variants.edges?.find((edge) => {
     const { node } = edge ?? {}
 
-    return Object.entries(opts).every(([key, value]) =>
-      node?.productOptions.edges?.find((edge) => {
-        if (
-          edge?.node.__typename === 'MultipleChoiceOption' &&
-          edge.node.displayName.toLowerCase() === key
-        ) {
-          return edge.node.values.edges?.find(
-            (valueEdge) => valueEdge?.node.label === value
-          )
+    //console.log(Object.entries(opts))
+    return Object.entries(opts).every(([key, value]) => {
+      const arrayUniqueByKey = [...new Map(node?.optionValues.edges?.map(item =>
+        [item.node['id'], item])).values()];
+
+      return arrayUniqueByKey?.find(
+        (valueEdge) => {
+          return valueEdge?.node.id === value
         }
-      })
-    )
+      )
+    })
   })
 
-  return variant
+  return variant?.node
 }

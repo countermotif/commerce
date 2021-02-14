@@ -43,6 +43,26 @@ export const productInfoFragment = /* GraphQL */ `
     name
     slug
     description
+    optionTypes {
+      edges {
+        node {
+          id
+          name
+          position
+          presentation
+          optionValues {
+            edges {
+              node {
+                id
+                name
+                position
+                presentation
+              }
+            }
+          }
+        }
+      }
+    }
     masterVariant {
       defaultPrice {
         amount
@@ -69,11 +89,35 @@ export const productInfoFragment = /* GraphQL */ `
     variants {
       edges {
         node {
+          id
+          defaultPrice {
+            amount
+            currency {
+              isoCode
+            }
+          }
+          prices {
+            edges {
+              node {
+                id
+              }
+            }
+          }
           images {
             edges {
               node {
                 largeUrl
                 alt
+              }
+            }
+          }
+          optionValues {
+            edges {
+              node {
+                id
+                name
+                position
+                presentation
               }
             }
           }

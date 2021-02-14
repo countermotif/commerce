@@ -9,7 +9,7 @@ import { Swatch, ProductSlider } from '@components/product'
 import { Button, Container, Text } from '@components/ui'
 
 import usePrice from '../../../framework/spree/use-price'
-//import useAddItem from '../../../framework/spree/cart/use-add-item'
+import useAddItem from '../../../framework/spree/cart/use-add-item'
 import type { ProductNode } from '../../../framework/spree/api/operations/get-product'
 import {
   getCurrentVariant,
@@ -25,30 +25,31 @@ interface Props {
 }
 
 const ProductView: FC<Props> = ({ product }) => {
-  //const addItem = useAddItem()
+  const addItem = useAddItem()
   const { price } = usePrice({
     amount: product.prices?.price?.value,
     baseAmount: product.prices?.retailPrice?.value,
     currencyCode: product.prices?.price?.currencyCode!,
   })
   const { openSidebar } = useUI()
-  //const options = getProductOptions(product)
-  const options = []
+  const options = getProductOptions(product)
   const [loading, setLoading] = useState(false)
   const [choices, setChoices] = useState<SelectedOptions>({
     size: null,
     color: null,
   })
   const variant =
-    getCurrentVariant(product, choices) || product.variants.edges?.[0]
+    getCurrentVariant(product, choices) || product.masterVariant
 
+   console.log(variant)
+   
   const addToCart = async () => {
     setLoading(true)
     try {
-      //await addItem({
-      //  productId: product.entityId,
-      //  variantId: product.variants.edges?.[0]?.node.entityId!,
-      //})
+      await addItem({
+        productId: product.id,
+        variantId: variant.id,
+      })
       openSidebar()
       setLoading(false)
     } catch (err) {
@@ -67,7 +68,7 @@ const ProductView: FC<Props> = ({ product }) => {
           description: product.description,
           images: [
             {
-              url: product.masterVariant.images.edges?.[0]?.node.largeUrl!,
+              url: variant.images.edges?.[0]?.node.largeUrl!,
               width: 800,
               height: 600,
               alt: product.name,
@@ -87,8 +88,8 @@ const ProductView: FC<Props> = ({ product }) => {
           </div>
 
           <div className={s.sliderContainer}>
-            <ProductSlider key={product.entityId}>
-              {product.masterVariant.images.edges?.map((image, i) => (
+            <ProductSlider key={product.id}>
+              {variant.images?.edges?.map((image, i) => (
                 <div key={image?.node.largeUrl} className={s.imageContainer}>
                   <Image
                     className={s.img}
@@ -116,16 +117,16 @@ const ProductView: FC<Props> = ({ product }) => {
 
                     return (
                       <Swatch
-                        key={`${v.entityId}-${i}`}
-                        active={v.label === active}
-                        variant={opt.displayName}
+                        key={`${v.id}-${i}`}
+                        active={v.id === active}
+                        variant={opt.name}
                         color={v.hexColors ? v.hexColors[0] : ''}
-                        label={v.label}
+                        label={v.presentation}
                         onClick={() => {
                           setChoices((choices) => {
                             return {
                               ...choices,
-                              [opt.displayName]: v.label,
+                              [opt.displayName]: v.id,
                             }
                           })
                         }}
