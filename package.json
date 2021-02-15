@@ -45,7 +45,8 @@
     "react-ticker": "^1.2.2",
     "swr": "^0.4.0",
     "tabbable": "^5.1.5",
-    "tailwindcss": "^2.0.2"
+    "tailwindcss": "^2.0.2",
+    "tslog": "^3.1.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.20.0",

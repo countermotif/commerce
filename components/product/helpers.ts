@@ -8,7 +8,6 @@ export function getVariant(product: Product, opts: SelectedOptions) {
     return Object.entries(opts).every(([key, value]) =>
       variant.options.find((option) => {
         if (
-          option.__typename === 'MultipleChoiceOption' &&
           option.displayName.toLowerCase() === key.toLowerCase()
         ) {
           return option.values.find((v) => v.label.toLowerCase() === value)
