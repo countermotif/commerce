@@ -58,8 +58,6 @@ const useCart: HookHandler<
   },
   async fetcher({ input: { cartId }, options, fetch }) {
     const data = cartId ? await fetch(options) : null
-    console.log(data)
-    console.log(normalizeCart(data.currentOrder))
     return data.currentOrder && normalizeCart(data.currentOrder)
   },
   useHook({ input, useData }) {
