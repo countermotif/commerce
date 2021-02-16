@@ -1,6 +1,7 @@
 import { parseCartItem } from '../../utils/parse-item'
 import getCartCookie from '../../utils/get-cart-cookie'
 import type { CartHandlers } from '..'
+import { updateCartQuantity } from '../../mutations/cart'
 
 const updateItem: CartHandlers['updateItem'] = async ({
   res,
@@ -14,13 +15,20 @@ const updateItem: CartHandlers['updateItem'] = async ({
     })
   }
 
-  const { data } = await config.storeApiFetch(
-    `/v3/carts/${cartId}/items/${itemId}?include=line_items.physical_items.options`,
-    {
-      method: 'PUT',
-      body: JSON.stringify({
-        line_item: parseCartItem(item),
-      }),
+  const { data } = await config.fetch(
+    updateCartQuantity,
+    { 
+      variables: { 
+        input: { 
+          quantity: item.quantity,
+          lineItemId: itemId
+        } 
+      }
+    },
+    { 
+      headers: { 
+        'X-Spree-Order-Token': cartId 
+      }
     }
   )
 
@@ -29,7 +37,7 @@ const updateItem: CartHandlers['updateItem'] = async ({
     'Set-Cookie',
     getCartCookie(config.cartCookie, cartId, config.cartCookieMaxAge)
   )
-  res.status(200).json({ data })
+  res.status(200).json({ data: data.updateCartQuantity.order })
 }
 
 export default updateItem

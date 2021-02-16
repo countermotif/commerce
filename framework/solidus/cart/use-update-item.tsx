@@ -16,7 +16,7 @@ import { fetcher as removeFetcher } from './use-remove-item'
 import useCart from './use-cart'
 
 const defaultOpts = {
-  url: '/api/bigcommerce/cart',
+  url: '/api/solidus/cart',
   method: 'PUT',
 }
 

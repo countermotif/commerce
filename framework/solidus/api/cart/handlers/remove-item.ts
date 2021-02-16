@@ -1,5 +1,6 @@
 import getCartCookie from '../../utils/get-cart-cookie'
 import type { CartHandlers } from '..'
+import { removeFromCart } from '../../mutations/cart'
 
 const removeItem: CartHandlers['removeItem'] = async ({
   res,
@@ -13,11 +14,21 @@ const removeItem: CartHandlers['removeItem'] = async ({
     })
   }
 
-  const result = await config.storeApiFetch<{ data: any } | null>(
-    `/v3/carts/${cartId}/items/${itemId}?include=line_items.physical_items.options`,
-    { method: 'DELETE' }
+  const { data } = await config.fetch(
+    removeFromCart,
+    { 
+      variables: { 
+        input: { 
+          lineItemId: itemId
+        } 
+      }
+    },
+    { 
+      headers: { 
+        'X-Spree-Order-Token': cartId 
+      }
+    }
   )
-  const data = result?.data ?? null
 
   res.setHeader(
     'Set-Cookie',
@@ -27,7 +38,7 @@ const removeItem: CartHandlers['removeItem'] = async ({
       : // Remove the cart cookie if the cart was removed (empty items)
         getCartCookie(config.cartCookie)
   )
-  res.status(200).json({ data })
+  res.status(200).json({ data: data.removeFromCart.order })
 }
 
 export default removeItem
