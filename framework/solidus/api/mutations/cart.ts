@@ -16,8 +16,7 @@ export const createOrder = /* GraphQL */ `
   mutation createOrder($input: CreateOrderInput!) { 
      createOrder(input: $input) {
        order {
-         id
-         guestToken
+         ...orderInfo
        }
      }
   }

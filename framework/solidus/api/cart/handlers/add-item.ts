@@ -11,7 +11,6 @@ const addItem: CartHandlers['addItem'] = async ({
 }) => {
   const log: Logger = new Logger();
 
-  log.warn(cartId)
   if (!item) {
     return res.status(400).json({
       data: null,
@@ -19,16 +18,6 @@ const addItem: CartHandlers['addItem'] = async ({
     })
   }
   if (!item.quantity) item.quantity = 1
-
-  // const options = {
-  //   method: 'POST',
-  //   body: JSON.stringify({
-  //     line_items: [parseCartItem(item)],
-  //     ...(!cartId && config.storeChannelId
-  //       ? { channel_id: config.storeChannelId }
-  //       : {}),
-  //   }),
-  // }
 
   const order = cartId
     ? await config.fetch(
@@ -64,8 +53,6 @@ const addItem: CartHandlers['addItem'] = async ({
     }
   )
 
-  console.log('w00t')
-  console.log(data)
   // Create or update the cart cookie
   res.setHeader(
     'Set-Cookie',

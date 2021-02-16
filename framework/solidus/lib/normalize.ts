@@ -39,6 +39,8 @@ function normalizeOptionValues(optionValue: any) {
   return {
     id: optionType.id,
     displayName: optionType.presentation,
+    name: optionType.presentation,
+    value: presentation,
     values: [ 
       {
         id: id,
@@ -122,11 +124,13 @@ export function normalizeCart(data: BigcommerceCart): Cart {
     customerId: undefined,
     email: data.email,
     createdAt: data.createdAt,
-    currency: data.currency,
+    currency: { 
+      code: data.currency 
+    },
     taxesIncluded: data.includedTaxTotal,
     lineItems: data.lineItems?.edges.map(({ node }: any) => normalizeLineItem(node)),
     lineItemsSubtotalPrice: data.itemTotal,
-    subtotalPrice: data.itemTotal + data.promoTotal,
+    subtotalPrice: Number(data.itemTotal) + Number(data.promoTotal),
     totalPrice: data.total,
     discounts: [data.promoTotal],
   }
@@ -150,6 +154,7 @@ function normalizeLineItem(item: any): LineItem {
       price: item.price,
       listPrice: item.price,
     },
+    options: item.variant.optionValues?.edges.map(({ node }: any) => normalizeOptionValues(node)),
     path: item.variant.product.slug,
     discounts: [],
   }

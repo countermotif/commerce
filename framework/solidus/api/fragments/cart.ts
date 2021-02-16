@@ -13,9 +13,26 @@ export const orderInfoFragment = /* GraphQL */ `
         node {
           id
           quantity
+          price
           variant {
             id
             sku
+            optionValues {
+              edges {
+                node {
+                  id
+                  name
+                  position
+                  presentation
+                  optionType {
+                    id
+                    name
+                    position
+                    presentation
+                  }
+                }
+              }
+            }
             product {
               id
               name
