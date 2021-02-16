@@ -22,18 +22,19 @@ This project is currently <b>under development</b>.
 - Dark Mode Support
 
 ## Work in progress
+
 We're using Github Projects to keep track of issues in progress and todo's. Here is our [Board](https://github.com/vercel/commerce/projects/1)
 
 ## Integrations
-Next.js Commerce integrates out-of-the-box with BigCommerce. We plan to support all major ecommerce backends.
 
+Next.js Commerce integrates out-of-the-box with BigCommerce. We plan to support all major ecommerce backends.
 
 ## Goals
 
-* **Next.js Commerce** should have a completely data **agnostic** UI
-* **Aware of schema**: should ship with the right data schemas and types.
-* All providers should return the right data types and schemas to blend correctly with Next.js Commerce.
-* `@framework` will be the alias utilized in commerce and it will map to the ecommerce provider of preference- e.g BigCommerce, Shopify, Swell. All providers should expose the same standardized functions. _Note that the same applies for recipes using a CMS + an ecommerce provider._
+- **Next.js Commerce** should have a completely data **agnostic** UI
+- **Aware of schema**: should ship with the right data schemas and types.
+- All providers should return the right data types and schemas to blend correctly with Next.js Commerce.
+- `@framework` will be the alias utilized in commerce and it will map to the ecommerce provider of preference- e.g BigCommerce, Shopify, Swell. All providers should expose the same standardized functions. _Note that the same applies for recipes using a CMS + an ecommerce provider._
 
 There is a `framework` folder in the root folder that will contain multiple ecommerce providers.
 
@@ -89,10 +90,45 @@ Our commitment to Open Source can be found [here](https://vercel.com/oss).
 5. Duplicate `.env.template` and rename it to `.env.local`.
 6. Add proper store values to `.env.local`.
 7. Run `yarn dev` to build and watch for code changes
-8. The development branch is `development` (this is the branch pull requests should be made against).
-   On a release, `develop` branch is rebased into `master`.
+8. The development branch is `canary` (this is the branch pull requests should be made against).
+   On a release, `canary` branch is rebased into `master`.
 
+## Framework
 
+Framework is where the data comes from. It contains mostly hooks and functions.
 
+## Structure
 
+Main folder and its exposed functions
 
+- `product`
+  - usePrice
+  - useSearch
+  - getProduct
+  - getAllProducts
+- `wishlist`
+  - useWishlist
+  - addWishlistItem
+  - removeWishlistItem
+- `auth`
+  - useLogin
+  - useLogout
+  - useSignup
+- `cart`
+
+  - useCart
+  - useAddItem
+  - useRemoveItem
+  - useCartActions
+  - useUpdateItem
+
+- `config.json`
+- README.md
+
+#### Example of correct usage of Commece Framework
+
+```js
+import { useUI } from '@components/ui'
+import { useCustomer } from '@framework/customer'
+import { useAddItem, useWishlist, useRemoveItem } from '@framework/wishlist'
+```

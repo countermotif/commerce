@@ -1,12 +1,13 @@
 import type { GetStaticPropsContext } from 'next'
 import { getConfig } from '@framework/api'
-import getAllPages from '@framework/api/operations/get-all-pages'
+import getAllPages from '@framework/common/get-all-pages'
 import useWishlist from '@framework/wishlist/use-wishlist'
 import { Layout } from '@components/common'
 import { Heart } from '@components/icons'
 import { Text, Container } from '@components/ui'
 import { WishlistCard } from '@components/wishlist'
 import { defaultPageProps } from '@lib/defaults'
+import { useCustomer } from '@framework/customer'
 
 export async function getStaticProps({
   preview,
@@ -20,14 +21,15 @@ export async function getStaticProps({
 }
 
 export default function Wishlist() {
-  const { data, isEmpty } = useWishlist({ includeProducts: true })
+  const { data: customer } = useCustomer()
+  const { data, isLoading, isEmpty } = useWishlist()
 
   return (
     <Container>
       <div className="mt-3 mb-20">
         <Text variant="pageHeading">My Wishlist</Text>
         <div className="group flex flex-col">
-          {isEmpty ? (
+          {isLoading || isEmpty ? (
             <div className="flex-1 px-12 py-24 flex flex-col justify-center items-center ">
               <span className="border border-dashed border-secondary flex items-center justify-center w-16 h-16 bg-primary p-12 rounded-lg text-primary">
                 <Heart className="absolute" />
