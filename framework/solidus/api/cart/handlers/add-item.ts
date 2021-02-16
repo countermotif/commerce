@@ -1,12 +1,17 @@
 import { parseCartItem } from '../../utils/parse-item'
 import getCartCookie from '../../utils/get-cart-cookie'
 import type { CartHandlers } from '..'
+import { createOrder, addToCart, getOrder } from '../../mutations/cart'
+import { Logger } from 'tslog'
 
 const addItem: CartHandlers['addItem'] = async ({
   res,
   body: { cartId, item },
   config,
 }) => {
+  const log: Logger = new Logger();
+
+  log.warn(cartId)
   if (!item) {
     return res.status(400).json({
       data: null,
@@ -15,31 +20,58 @@ const addItem: CartHandlers['addItem'] = async ({
   }
   if (!item.quantity) item.quantity = 1
 
-  const options = {
-    method: 'POST',
-    body: JSON.stringify({
-      line_items: [parseCartItem(item)],
-      ...(!cartId && config.storeChannelId
-        ? { channel_id: config.storeChannelId }
-        : {}),
-    }),
-  }
-  const { data } = cartId
-    ? await config.storeApiFetch(
-        `/v3/carts/${cartId}/items?include=line_items.physical_items.options`,
-        options
+  // const options = {
+  //   method: 'POST',
+  //   body: JSON.stringify({
+  //     line_items: [parseCartItem(item)],
+  //     ...(!cartId && config.storeChannelId
+  //       ? { channel_id: config.storeChannelId }
+  //       : {}),
+  //   }),
+  // }
+
+  const order = cartId
+    ? await config.fetch(
+        getOrder
       )
-    : await config.storeApiFetch(
-        '/v3/carts?include=line_items.physical_items.options',
-        options
+    : await config.fetch(
+        createOrder,
+        { 
+          variables: { 
+            input: { 
+              clientMutationId: 'xxx' 
+            } 
+          }
+        }
       )
 
+  const guestToken = order?.data?.createOrder?.order?.guestToken ?? cartId
+
+  const { data } = await config.fetch(
+    addToCart,
+    { 
+      variables: { 
+        input: { 
+          quantity: item.quantity,
+          variantId: item.variantId
+        } 
+      }
+    },
+    { 
+      headers: { 
+        'X-Spree-Order-Token': guestToken 
+      }
+    }
+  )
+
+  console.log('w00t')
+  console.log(data)
   // Create or update the cart cookie
   res.setHeader(
     'Set-Cookie',
-    getCartCookie(config.cartCookie, data.id, config.cartCookieMaxAge)
+    getCartCookie(config.cartCookie, guestToken, config.cartCookieMaxAge)
   )
-  res.status(200).json({ data })
+  res.status(200).json({ data: data.addToCart.order })
 }
 
 export default addItem

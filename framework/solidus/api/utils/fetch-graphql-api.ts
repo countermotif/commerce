@@ -11,6 +11,12 @@ const fetchGraphqlApi: GraphQLFetcher = async (
 ) => {
   const log: Logger = new Logger();
   const config = getConfig()
+  log.warn(variables)
+  log.warn(fetchOptions)
+  log.warn(JSON.stringify({
+      query,
+      variables,
+    }))
   const res = await fetch(config.commerceUrl + (preview ? '/preview' : ''), {
     ...fetchOptions,
     method: 'POST',

@@ -26,9 +26,6 @@ export async function getStaticProps({
   const { categories, brands } = await getSiteInfo({ config, preview })
   const { pages } = await getAllPages({ config, preview })
 
-  //log.warn(products)
-  //log.warn(products[0].masterVariant)
-
   return {
     props: {
       products,

@@ -119,42 +119,38 @@ export function normalizeProductPath(product) {
 export function normalizeCart(data: BigcommerceCart): Cart {
   return {
     id: data.id,
-    customerId: String(data.customer_id),
+    customerId: undefined,
     email: data.email,
-    createdAt: data.created_time,
+    createdAt: data.createdAt,
     currency: data.currency,
-    taxesIncluded: data.tax_included,
-    lineItems: data.line_items.physical_items.map(normalizeLineItem),
-    lineItemsSubtotalPrice: data.base_amount,
-    subtotalPrice: data.base_amount + data.discount_amount,
-    totalPrice: data.cart_amount,
-    discounts: data.discounts?.map((discount) => ({
-      value: discount.discounted_amount,
-    })),
+    taxesIncluded: data.includedTaxTotal,
+    lineItems: data.lineItems?.edges.map(({ node }: any) => normalizeLineItem(node)),
+    lineItemsSubtotalPrice: data.itemTotal,
+    subtotalPrice: data.itemTotal + data.promoTotal,
+    totalPrice: data.total,
+    discounts: [data.promoTotal],
   }
 }
 
 function normalizeLineItem(item: any): LineItem {
   return {
     id: item.id,
-    variantId: String(item.variant_id),
-    productId: String(item.product_id),
-    name: item.name,
+    variantId: String(item.variant.id),
+    productId: String(item.variant.product.id),
+    name: item.variant.product.name,
     quantity: item.quantity,
     variant: {
-      id: String(item.variant_id),
-      sku: item.sku,
-      name: item.name,
+      id: String(item.variant.id),
+      sku: item.variant.sku,
+      name: item.variant.product.name,
       image: {
-        url: item.image_url,
+        url: 'http://localhost:5555/' + item.variant.images.edges[0].node.largeUrl,
       },
-      requiresShipping: item.is_require_shipping,
-      price: item.sale_price,
-      listPrice: item.list_price,
+      requiresShipping: true,
+      price: item.price,
+      listPrice: item.price,
     },
-    path: item.url.split('/')[3],
-    discounts: item.discounts.map((discount: any) => ({
-      value: discount.discounted_amount,
-    })),
+    path: item.variant.product.slug,
+    discounts: [],
   }
 }

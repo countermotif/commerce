@@ -64,7 +64,6 @@ async function getProduct({
   }
   const { data } = await config.fetch<GetProductQuery>(query, { variables })
 
-  log.warn(data)
   const product = data.productBySlug
 
   //if (product?.__typename === 'Product') {

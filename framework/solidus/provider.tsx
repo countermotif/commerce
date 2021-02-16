@@ -53,12 +53,14 @@ const useCart: HookHandler<
   { isEmpty?: boolean }
 > = {
   fetchOptions: {
-    url: '/api/bigcommerce/cart',
+    url: '/api/solidus/cart',
     method: 'GET',
   },
   async fetcher({ input: { cartId }, options, fetch }) {
     const data = cartId ? await fetch(options) : null
-    return data && normalizeCart(data)
+    console.log(data)
+    console.log(normalizeCart(data.currentOrder))
+    return data.currentOrder && normalizeCart(data.currentOrder)
   },
   useHook({ input, useData }) {
     const response = useData({

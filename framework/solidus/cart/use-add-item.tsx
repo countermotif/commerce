@@ -14,7 +14,7 @@ import type {
 import useCart from './use-cart'
 
 const defaultOpts = {
-  url: '/api/bigcommerce/cart',
+  url: '/api/solidus/cart',
   method: 'POST',
 }
 

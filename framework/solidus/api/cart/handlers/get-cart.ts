@@ -2,6 +2,7 @@ import type { BigcommerceCart } from '../../../types'
 import { BigcommerceApiError } from '../../utils/errors'
 import getCartCookie from '../../utils/get-cart-cookie'
 import type { CartHandlers } from '../'
+import { getOrder } from '../../mutations/cart'
 
 // Return current cart info
 const getCart: CartHandlers['getCart'] = async ({
@@ -13,8 +14,14 @@ const getCart: CartHandlers['getCart'] = async ({
 
   if (cartId) {
     try {
-      result = await config.storeApiFetch(
-        `/v3/carts/${cartId}?include=line_items.physical_items.options`
+      result = await config.fetch(
+        getOrder,
+        {},
+        { 
+          headers: { 
+            'X-Spree-Order-Token': cartId 
+          }
+        }
       )
     } catch (error) {
       if (error instanceof BigcommerceApiError && error.status === 404) {
