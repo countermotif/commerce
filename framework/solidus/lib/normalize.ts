@@ -8,6 +8,8 @@ function normalizeOptionTypes(optionType: any) {
     name
   } = optionType
 
+  const parentPresentation = presentation
+
   const updated = update(optionType, {
     values: {
       $set: optionType.optionValues
@@ -22,6 +24,7 @@ function normalizeOptionTypes(optionType: any) {
         edges?.map(({ node: { id, name, presentation, position } }: any) => ({
           id: id,
           label: presentation,
+          hexColors: parentPresentation == 'Color' ? [presentation] : null,
         })),
     }
   })
