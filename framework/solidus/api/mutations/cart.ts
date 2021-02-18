@@ -20,6 +20,8 @@ export const createOrder = /* GraphQL */ `
        }
      }
   }
+
+  ${orderInfoFragment}
 `
 
 export const getOrder = /* GraphQL */ `

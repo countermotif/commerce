@@ -8,6 +8,7 @@ export const orderInfoFragment = /* GraphQL */ `
     itemTotal
     promoTotal
     total
+    guestToken
     lineItems {
       edges {
         node {
