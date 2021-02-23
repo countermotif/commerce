@@ -1,4 +1,4 @@
 import useCustomer, { UseCustomer } from '@commerce/customer/use-customer'
-import type { BigcommerceProvider } from '..'
+import type { SolidusProvider } from '..'
 
-export default useCustomer as UseCustomer<BigcommerceProvider>
+export default useCustomer as UseCustomer<SolidusProvider>

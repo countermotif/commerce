@@ -36,7 +36,7 @@ export class Config {
       ...config,
       // The customerCookie is not customizable for now, BC sets the cookie and it's
       // not important to rename it
-      customerCookie: 'SHOP_TOKEN',
+      customerCookie: 'session',
     }
   }
 

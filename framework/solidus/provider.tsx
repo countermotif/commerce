@@ -133,11 +133,12 @@ const useWishlist: HookHandler<
 
 const useCustomerHandler: HookHandler<Customer | null> = {
   fetchOptions: {
-    url: '/api/bigcommerce/customers',
+    url: '/api/solidus/customers',
     method: 'GET',
   },
   async fetcher({ options, fetch }) {
     const data = await fetch<CustomerData | null>(options)
+    
     return data?.customer ?? null
   },
   useHook({ input, useData }) {

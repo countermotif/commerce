@@ -5,10 +5,12 @@ import concatHeader from '../api/utils/concat-cookie'
 import { BigcommerceConfig, getConfig } from '../api'
 
 export const loginMutation = /* GraphQL */ `
-  mutation login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      result
-    }
+  mutation login($input: LoginInput!) { 
+     login(input: $input) {
+       user {
+         id
+       }
+     }
   }
 `
 
@@ -44,8 +46,13 @@ async function login({
 
   const { data, res } = await config.fetch<RecursivePartial<LoginMutation>>(
     query,
-    { variables }
+    { 
+      variables: {
+        input: variables
+      }
+    }
   )
+
   // Bigcommerce returns a Set-Cookie header with the auth cookie
   let cookie = res.headers.get('Set-Cookie')
 

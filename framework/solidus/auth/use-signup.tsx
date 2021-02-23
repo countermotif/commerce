@@ -6,7 +6,7 @@ import type { SignupBody } from '../api/customers/signup'
 import useCustomer from '../customer/use-customer'
 
 const defaultOpts = {
-  url: '/api/bigcommerce/customers/signup',
+  url: '/api/solidus/customers/signup',
   method: 'POST',
 }
 

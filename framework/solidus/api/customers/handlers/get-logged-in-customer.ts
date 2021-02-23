@@ -2,22 +2,10 @@ import type { GetLoggedInCustomerQuery } from '../../../schema'
 import type { CustomersHandlers } from '..'
 
 export const getLoggedInCustomerQuery = /* GraphQL */ `
-  query getLoggedInCustomer {
-    customer {
-      entityId
-      firstName
-      lastName
+  query getLoggedInCustomerQuery {
+    currentUser {
+      id
       email
-      company
-      customerGroupId
-      notes
-      phone
-      addressCount
-      attributeCount
-      storeCredit {
-        value
-        currencyCode
-      }
     }
   }
 `
@@ -29,9 +17,9 @@ const getLoggedInCustomer: CustomersHandlers['getLoggedInCustomer'] = async ({
   res,
   config,
 }) => {
-  const token = req.cookies[config.customerCookie]
+  const token = encodeURIComponent(req.cookies[config.customerCookie])
 
-  if (token) {
+  if (req.cookies[config.customerCookie]) {
     const { data } = await config.fetch<GetLoggedInCustomerQuery>(
       getLoggedInCustomerQuery,
       undefined,
@@ -39,9 +27,10 @@ const getLoggedInCustomer: CustomersHandlers['getLoggedInCustomer'] = async ({
         headers: {
           cookie: `${config.customerCookie}=${token}`,
         },
-      }
+      },
     )
-    const { customer } = data
+
+    const customer = data.currentUser
 
     if (!customer) {
       return res.status(400).json({

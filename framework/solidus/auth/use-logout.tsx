@@ -4,7 +4,7 @@ import useCommerceLogout from '@commerce/use-logout'
 import useCustomer from '../customer/use-customer'
 
 const defaultOpts = {
-  url: '/api/bigcommerce/customers/logout',
+  url: '/api/solidus/customers/logout',
   method: 'GET',
 }
 
