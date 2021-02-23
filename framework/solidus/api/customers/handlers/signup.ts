@@ -9,6 +9,9 @@ export const createUserMutation = /* GraphQL */ `
        user {
          id
        }
+       errors {
+         message
+       }
      }
   }
 `
@@ -29,11 +32,13 @@ const signup: SignupHandlers['signup'] = async ({
   // Passwords must be at least 7 characters and contain both alphabetic
   // and numeric characters.
 
-  const { data, result } = await config.fetch<RecursivePartial<typeof createUserMutation>>(
+  const { data } = await config.fetch<RecursivePartial<typeof createUserMutation>>(
     createUserMutation,
     { 
       variables: {
         input: {
+          firstName: firstName,
+          lastName: lastName,
           email: email,
           password: password,
         }
@@ -41,40 +46,21 @@ const signup: SignupHandlers['signup'] = async ({
     }
   )
 
-  // try {
-  //   await config.storeApiFetch('/v3/customers', {
-  //     method: 'POST',
-  //     body: JSON.stringify([
-  //       {
-  //         first_name: firstName,
-  //         last_name: lastName,
-  //         email,
-  //         authentication: {
-  //           new_password: password,
-  //         },
-  //       },
-  //     ]),
-  //   })
-  // } catch (error) {
-  //   if (error instanceof BigcommerceApiError && error.status === 422) {
-  //     const hasEmailError = '0.email' in error.data?.errors
-
-  //     // If there's an error with the email, it most likely means it's duplicated
-  //     if (hasEmailError) {
-  //       return res.status(400).json({
-  //         data: null,
-  //         errors: [
-  //           {
-  //             message: 'The email is already in use',
-  //             code: 'duplicated_email',
-  //           },
-  //         ],
-  //       })
-  //     }
-  //   }
-
-  //   throw error
-  // }
+  if (data.createUser.errors.length > 0) {
+    const hasEmailError = data.createUser.errors[0].message == 'has already been taken'
+    // If there's an error with the email, it most likely means it's duplicated
+    if (hasEmailError) {
+      return res.status(400).json({
+        data: null,
+        errors: [
+          {
+            message: 'The email is already in use',
+            code: 'duplicated_email',
+          },
+        ],
+      })
+    }
+  }
 
   // Login the customer right after creating it
   await login({ variables: { email, password }, res, config })
