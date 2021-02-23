@@ -20,15 +20,12 @@ const checkoutApi: BigcommerceApiHandler<any> = async (req, res, config) => {
       return
     }
 
-    const { data } = await config.storeApiFetch(
-      `/v3/carts/${cartId}/redirect_urls`,
-      {
-        method: 'POST',
-      }
-    )
-
     if (fullCheckout) {
-      res.redirect(data.checkout_url)
+      if (cookies[config.customerCookie]) {
+        res.redirect(`http://localhost:5555/orders/${cartId}/checkout`)
+      } else {
+        res.redirect(`http://localhost:5555/orders/${cartId}/checkout`)
+      }
       return
     }
 
