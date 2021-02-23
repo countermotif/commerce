@@ -2,7 +2,7 @@ import type { ServerResponse } from 'http'
 import type { LoginMutation, LoginMutationVariables } from '../schema'
 import type { RecursivePartial } from '../api/utils/types'
 import concatHeader from '../api/utils/concat-cookie'
-import { BigcommerceConfig, getConfig } from '../api'
+import { SolidusConfig, getConfig } from '../api'
 
 export const loginMutation = /* GraphQL */ `
   mutation login($input: LoginInput!) { 
@@ -20,7 +20,7 @@ export type LoginVariables = LoginMutationVariables
 
 async function login(opts: {
   variables: LoginVariables
-  config?: BigcommerceConfig
+  config?: SolidusConfig
   res: ServerResponse
 }): Promise<LoginResult>
 
@@ -28,7 +28,7 @@ async function login<T extends { result?: any }, V = any>(opts: {
   query: string
   variables: V
   res: ServerResponse
-  config?: BigcommerceConfig
+  config?: SolidusConfig
 }): Promise<LoginResult<T>>
 
 async function login({
@@ -40,7 +40,7 @@ async function login({
   query?: string
   variables: LoginVariables
   res: ServerResponse
-  config?: BigcommerceConfig
+  config?: SolidusConfig
 }): Promise<LoginResult> {
   config = getConfig(config)
 
