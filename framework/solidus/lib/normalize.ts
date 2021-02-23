@@ -57,58 +57,34 @@ export function normalizeProduct(productNode: any): Product {
   const {
     id,
     masterVariant,
+    name,
+    variants,
     optionTypes,
     slug,
-    id: _,
-    options: _0,
   } = productNode
 
-
-  const updated = update(productNode, {
-    images: {
-      $set: masterVariant.images
-    },
-  })
-
-  return update(updated, {
-    id: { $set: String(id) },
-    images: {
-      $apply: ({ edges }: any) =>
-        edges?.map(({ node: { largeUrl, alt, ...rest } }: any) => ({
-          url: 'http://localhost:5555/' + largeUrl,
-          alt: alt,
-          ...rest,
-        })),
-    },
-    variants: {
-      $apply: ({ edges }: any) =>
-        edges?.map(({ node: { id, optionValues, ...rest } }: any) => ({
-          id: id,
-          options: optionValues?.edges
-            ? optionValues?.edges.map(({ node }: any) => normalizeOptionValues(node))
-            : [],
-          ...rest,
-        })),
-    },
-    options: {
-      $set: optionTypes.edges
+  return {
+    id: id,
+    name: name,
+    images: masterVariant.images?.edges.length > 0
+      ? masterVariant.images.edges?.map(({ node: { largeUrl, alt } }: any) => ({url: 'http://localhost:5555/' + largeUrl, alt: alt }))
+      : variants.edges[0]?.node?.images.edges?.map(({ node: { largeUrl, alt } }: any) => ({url: 'http://localhost:5555/' + largeUrl, alt: alt })),
+    variants: variants.edges?.map(({ node: { id, optionValues } }: any) => ({
+      id: id,
+      options: optionValues?.edges
+        ? optionValues?.edges.map(({ node }: any) => normalizeOptionValues(node))
+        : [],
+    })),
+    options: optionTypes.edges
         ? optionTypes?.edges.map(({ node }: any) => normalizeOptionTypes(node))
         : [],
-    },
-    brand: {
-      $set: '+++BRAND+++'
-    },
-    slug: {
-      $set: slug
-    },
+    brand: '?',
+    slug: slug,
     price: {
-      $set: {
-        value: masterVariant?.defaultPrice.amount,
-        currencyCode: masterVariant?.defaultPrice?.currency?.isoCode,
-      },
+      value: masterVariant?.defaultPrice.amount,
+      currencyCode: masterVariant?.defaultPrice?.currency?.isoCode,
     },
-    $unset: ['id'],
-  })
+  }
 }
 
 export function normalizeProductPath(product) {
