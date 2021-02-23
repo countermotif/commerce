@@ -36,29 +36,68 @@ const addItem: CartHandlers['addItem'] = async ({
 
   const guestToken = order?.data?.createOrder?.order?.guestToken ?? cartId
 
-  const { data } = await config.fetch(
-    addToCart,
-    { 
-      variables: { 
-        input: { 
-          quantity: item.quantity,
-          variantId: item.variantId
-        } 
+  try {
+    const { data } = await config.fetch(
+      addToCart,
+      { 
+        variables: { 
+          input: { 
+            quantity: item.quantity,
+            variantId: item.variantId
+          } 
+        }
+      },
+      { 
+        headers: { 
+          'X-Spree-Order-Token': guestToken 
+        }
       }
-    },
-    { 
-      headers: { 
-        'X-Spree-Order-Token': guestToken 
-      }
-    }
-  )
+    )
 
-  // Create or update the cart cookie
-  res.setHeader(
-    'Set-Cookie',
-    getCartCookie(config.cartCookie, guestToken, config.cartCookieMaxAge)
-  )
-  res.status(200).json({ data: data.addToCart.order })
+    // Create or update the cart cookie
+    res.setHeader(
+      'Set-Cookie',
+      getCartCookie(config.cartCookie, guestToken, config.cartCookieMaxAge)
+    )
+    res.status(200).json({ data: data.addToCart.order })
+  } catch {
+    const order = await config.fetch(
+      createOrder,
+      { 
+        variables: { 
+          input: { 
+            clientMutationId: 'xxx' 
+          } 
+        }
+      }
+    )
+
+    const guestToken = order?.data?.createOrder?.order?.guestToken
+
+    const { data } = await config.fetch(
+      addToCart,
+      { 
+        variables: { 
+          input: { 
+            quantity: item.quantity,
+            variantId: item.variantId
+          } 
+        }
+      },
+      { 
+        headers: { 
+          'X-Spree-Order-Token': guestToken 
+        }
+      }
+    )
+
+    // Create or update the cart cookie
+    res.setHeader(
+      'Set-Cookie',
+      getCartCookie(config.cartCookie, guestToken, config.cartCookieMaxAge)
+    )
+    res.status(200).json({ data: data.addToCart.order })
+  }
 }
 
 export default addItem
