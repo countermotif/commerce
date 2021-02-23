@@ -58,6 +58,7 @@ export function normalizeProduct(productNode: any): Product {
     id,
     masterVariant,
     name,
+    description,
     variants,
     optionTypes,
     slug,
@@ -66,15 +67,18 @@ export function normalizeProduct(productNode: any): Product {
   return {
     id: id,
     name: name,
-    images: masterVariant.images?.edges.length > 0
+    description: description,
+    images: masterVariant.images?.edges?.length > 0
       ? masterVariant.images.edges?.map(({ node: { largeUrl, alt } }: any) => ({url: 'http://localhost:5555/' + largeUrl, alt: alt }))
       : variants.edges[0]?.node?.images.edges?.map(({ node: { largeUrl, alt } }: any) => ({url: 'http://localhost:5555/' + largeUrl, alt: alt })),
-    variants: variants.edges?.map(({ node: { id, optionValues } }: any) => ({
-      id: id,
-      options: optionValues?.edges
-        ? optionValues?.edges.map(({ node }: any) => normalizeOptionValues(node))
-        : [],
-    })),
+    variants: variants?.edges?.length > 0
+      ? variants.edges?.map(({ node: { id, optionValues } }: any) => ({
+        id: id,
+        options: optionValues?.edges
+          ? optionValues?.edges.map(({ node }: any) => normalizeOptionValues(node))
+          : [],
+      }))
+      : [{ id: masterVariant.id, options: [] }],
     options: optionTypes.edges
         ? optionTypes?.edges.map(({ node }: any) => normalizeOptionTypes(node))
         : [],

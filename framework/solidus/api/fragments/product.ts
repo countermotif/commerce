@@ -64,6 +64,7 @@ export const productInfoFragment = /* GraphQL */ `
       }
     }
     masterVariant {
+      id
       defaultPrice {
         amount
         currency {
@@ -82,6 +83,22 @@ export const productInfoFragment = /* GraphQL */ `
           node {
             largeUrl
             alt
+          }
+        }
+      }
+      optionValues {
+        edges {
+          node {
+            id
+            name
+            position
+            presentation
+            optionType {
+              id
+              name
+              position
+              presentation
+            }
           }
         }
       }
