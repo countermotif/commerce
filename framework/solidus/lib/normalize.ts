@@ -85,8 +85,9 @@ export function normalizeProduct(productNode: any): Product {
     brand: '?',
     slug: slug,
     price: {
-      value: masterVariant?.defaultPrice.amount,
-      currencyCode: masterVariant?.defaultPrice?.currency?.isoCode,
+      value: Number(masterVariant?.defaultPrice.amount),
+      retailPrice: Number(masterVariant?.defaultPrice.amount),
+      currencyCode: String(masterVariant?.defaultPrice?.currency?.isoCode),
     },
   }
 }

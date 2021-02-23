@@ -1,6 +1,17 @@
 import { BigcommerceApiError } from '../../utils/errors'
 import login from '../../../auth/login'
 import { SignupHandlers } from '../signup'
+import type { RecursivePartial } from '../../utils/types'
+
+export const createUserMutation = /* GraphQL */ `
+  mutation createUser($input: CreateUserInput!) { 
+     createUser(input: $input) {
+       user {
+         id
+       }
+     }
+  }
+`
 
 const signup: SignupHandlers['signup'] = async ({
   res,
@@ -18,40 +29,52 @@ const signup: SignupHandlers['signup'] = async ({
   // Passwords must be at least 7 characters and contain both alphabetic
   // and numeric characters.
 
-  try {
-    await config.storeApiFetch('/v3/customers', {
-      method: 'POST',
-      body: JSON.stringify([
-        {
-          first_name: firstName,
-          last_name: lastName,
-          email,
-          authentication: {
-            new_password: password,
-          },
-        },
-      ]),
-    })
-  } catch (error) {
-    if (error instanceof BigcommerceApiError && error.status === 422) {
-      const hasEmailError = '0.email' in error.data?.errors
-
-      // If there's an error with the email, it most likely means it's duplicated
-      if (hasEmailError) {
-        return res.status(400).json({
-          data: null,
-          errors: [
-            {
-              message: 'The email is already in use',
-              code: 'duplicated_email',
-            },
-          ],
-        })
+  const { data, result } = await config.fetch<RecursivePartial<typeof createUserMutation>>(
+    createUserMutation,
+    { 
+      variables: {
+        input: {
+          email: email,
+          password: password,
+        }
       }
     }
+  )
 
-    throw error
-  }
+  // try {
+  //   await config.storeApiFetch('/v3/customers', {
+  //     method: 'POST',
+  //     body: JSON.stringify([
+  //       {
+  //         first_name: firstName,
+  //         last_name: lastName,
+  //         email,
+  //         authentication: {
+  //           new_password: password,
+  //         },
+  //       },
+  //     ]),
+  //   })
+  // } catch (error) {
+  //   if (error instanceof BigcommerceApiError && error.status === 422) {
+  //     const hasEmailError = '0.email' in error.data?.errors
+
+  //     // If there's an error with the email, it most likely means it's duplicated
+  //     if (hasEmailError) {
+  //       return res.status(400).json({
+  //         data: null,
+  //         errors: [
+  //           {
+  //             message: 'The email is already in use',
+  //             code: 'duplicated_email',
+  //           },
+  //         ],
+  //       })
+  //     }
+  //   }
+
+  //   throw error
+  // }
 
   // Login the customer right after creating it
   await login({ variables: { email, password }, res, config })

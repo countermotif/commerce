@@ -87,7 +87,7 @@ const useWishlist: HookHandler<
   { isEmpty?: boolean }
 > = {
   fetchOptions: {
-    url: '/api/bigcommerce/wishlist',
+    url: '/api/solidus/wishlist',
     method: 'GET',
   },
   fetcher({ input: { customerId, includeProducts }, options, fetch }) {

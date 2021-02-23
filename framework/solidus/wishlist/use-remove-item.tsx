@@ -7,7 +7,7 @@ import useCustomer from '../customer/use-customer'
 import useWishlist, { UseWishlistOptions, Wishlist } from './use-wishlist'
 
 const defaultOpts = {
-  url: '/api/bigcommerce/wishlist',
+  url: '/api/solidus/wishlist',
   method: 'DELETE',
 }
 
