@@ -1,66 +1,50 @@
 import { useCallback } from 'react'
-import type { HookFetcher } from '@commerce/utils/types'
+import type { MutationHook } from '@commerce/utils/types'
 import { CommerceError } from '@commerce/utils/errors'
-import useCartAddItem, {
-  AddItemInput as UseAddItemInput,
-} from '@commerce/cart/use-add-item'
+import useAddItem, { UseAddItem } from '@commerce/cart/use-add-item'
 import { normalizeCart } from '../lib/normalize'
 import type {
-  AddCartItemBody,
   Cart,
   BigcommerceCart,
   CartItemBody,
+  AddCartItemBody,
 } from '../types'
 import useCart from './use-cart'
 
-const defaultOpts = {
-  url: '/api/solidus/cart',
-  method: 'POST',
-}
+export default useAddItem as UseAddItem<typeof handler>
 
-export type AddItemInput = UseAddItemInput<CartItemBody>
+export const handler: MutationHook<Cart, {}, CartItemBody> = {
+  fetchOptions: {
+    url: '/api/solidus/cart',
+    method: 'POST',
+  },
+  async fetcher({ input: item, options, fetch }) {
+    if (
+      item.quantity &&
+      (!Number.isInteger(item.quantity) || item.quantity! < 1)
+    ) {
+      throw new CommerceError({
+        message: 'The item quantity has to be a valid integer greater than 0',
+      })
+    }
 
-export const fetcher: HookFetcher<Cart, AddCartItemBody> = async (
-  options,
-  { item },
-  fetch
-) => {
-  if (
-    item.quantity &&
-    (!Number.isInteger(item.quantity) || item.quantity! < 1)
-  ) {
-    throw new CommerceError({
-      message: 'The item quantity has to be a valid integer greater than 0',
+    const data = await fetch<BigcommerceCart, AddCartItemBody>({
+      ...options,
+      body: { item },
     })
-  }
 
-  const data = await fetch<BigcommerceCart, AddCartItemBody>({
-    ...defaultOpts,
-    ...options,
-    body: { item },
-  })
-
-  return normalizeCart(data)
-}
-
-export function extendHook(customFetcher: typeof fetcher) {
-  const useAddItem = () => {
+    return normalizeCart(data)
+  },
+  useHook: ({ fetch }) => () => {
     const { mutate } = useCart()
-    const fn = useCartAddItem(defaultOpts, customFetcher)
 
     return useCallback(
-      async function addItem(input: AddItemInput) {
-        const data = await fn({ item: input })
+      async function addItem(input) {
+        const data = await fetch({ input })
         await mutate(data, false)
         return data
       },
-      [fn, mutate]
+      [fetch, mutate]
     )
-  }
-
-  useAddItem.extend = extendHook
-
-  return useAddItem
+  },
 }
-
-export default extendHook(fetcher)
