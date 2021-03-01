@@ -33,7 +33,7 @@ const getCart: CartHandlers['getCart'] = async ({
     }
   }
 
-  res.status(200).json({ data: result.data ?? null })
+  res.status(200).json({ data: result.data.currentOrder ?? null })
 }
 
 export default getCart
