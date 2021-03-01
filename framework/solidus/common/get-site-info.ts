@@ -84,7 +84,11 @@ async function getSiteInfo({
     { variables }
   )
 
-  const filteredCategories = data.taxonomies?.edges[0]?.node?.taxons.edges.filter(({ node }: any) => {
+  const categoryTree = data.taxonomies?.edges.filter(({ node }: any) => {
+    return node.name == 'Categories'
+  })[0]
+
+  const filteredCategories = categoryTree?.node?.taxons.edges.filter(({ node }: any) => {
     return node.parentTaxon?.name == 'Categories'
   })
 
@@ -97,7 +101,11 @@ async function getSiteInfo({
     }
   })
 
-  const filteredBrands = data.taxonomies?.edges[1]?.node?.taxons.edges.filter(({ node }: any) => {
+  const brandTree = data.taxonomies?.edges.filter(({ node }: any) => {
+    return node.name == 'Brand'
+  })[0]
+
+  const filteredBrands = brandTree?.node?.taxons.edges.filter(({ node }: any) => {
     return node.parentTaxon?.name == 'Brand'
   })
 
