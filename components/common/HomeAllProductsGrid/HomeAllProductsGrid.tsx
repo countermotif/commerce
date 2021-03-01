@@ -1,5 +1,6 @@
 import { FC } from 'react'
 import Link from 'next/link'
+import type { Product } from '@commerce/types'
 import { Grid } from '@components/ui'
 import { ProductCard } from '@components/product'
 import s from './HomeAllProductsGrid.module.css'
@@ -11,7 +12,11 @@ interface Props {
   products?: Product[]
 }
 
-const Head: FC<Props> = ({ categories, brands, products = [] }) => {
+const HomeAllProductsGrid: FC<Props> = ({
+  categories,
+  brands,
+  products = [],
+}) => {
   return (
     <div className={s.root}>
       <div className={s.asideWrapper}>
@@ -65,4 +70,4 @@ const Head: FC<Props> = ({ categories, brands, products = [] }) => {
   )
 }
 
-export default Head
+export default HomeAllProductsGrid

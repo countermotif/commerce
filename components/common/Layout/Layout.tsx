@@ -41,10 +41,14 @@ const FeatureBar = dynamic(
 interface Props {
   pageProps: {
     pages?: Page[]
+    commerceFeatures: Record<string, boolean>
   }
 }
 
-const Layout: FC<Props> = ({ children, pageProps }) => {
+const Layout: FC<Props> = ({
+  children,
+  pageProps: { commerceFeatures, ...pageProps },
+}) => {
   const {
     displaySidebar,
     displayModal,
@@ -54,7 +58,6 @@ const Layout: FC<Props> = ({ children, pageProps }) => {
   } = useUI()
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   const { locale = 'en-US' } = useRouter()
-
   return (
     <CommerceProvider locale={locale}>
       <div className={cn(s.root)}>

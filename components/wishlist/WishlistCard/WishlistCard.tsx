@@ -7,6 +7,7 @@ import { Trash } from '@components/icons'
 import { Button, Text } from '@components/ui'
 
 import { useUI } from '@components/ui/context'
+import type { Product } from '@commerce/types'
 import usePrice from '@framework/product/use-price'
 import useAddItem from '@framework/cart/use-add-item'
 import useRemoveItem from '@framework/wishlist/use-remove-item'
@@ -21,7 +22,8 @@ const WishlistCard: FC<Props> = ({ product }) => {
     baseAmount: product.prices?.retailPrice?.value,
     currencyCode: product.prices?.price?.currencyCode!,
   })
-  const removeItem = useRemoveItem({ includeProducts: true })
+  // @ts-ignore Wishlist is not always enabled
+  const removeItem = useRemoveItem({ wishlist: { includeProducts: true } })
   const [loading, setLoading] = useState(false)
   const [removing, setRemoving] = useState(false)
   const addItem = useAddItem()
@@ -42,8 +44,8 @@ const WishlistCard: FC<Props> = ({ product }) => {
     setLoading(true)
     try {
       await addItem({
-        productId: product.id,
-        variantId: product.variants[0].id,
+        productId: String(product.id),
+        variantId: String(product.variants[0].id),
       })
       openSidebar()
       setLoading(false)

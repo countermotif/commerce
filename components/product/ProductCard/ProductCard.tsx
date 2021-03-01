@@ -1,9 +1,10 @@
 import { FC } from 'react'
 import cn from 'classnames'
 import Link from 'next/link'
+import type { Product } from '@commerce/types'
 import s from './ProductCard.module.css'
 import Image, { ImageProps } from 'next/image'
-// import WishlistButton from '@components/wishlist/WishlistButton'
+import WishlistButton from '@components/wishlist/WishlistButton'
 
 interface Props {
   className?: string
@@ -56,11 +57,13 @@ const ProductCard: FC<Props> = ({
                 {product.price.currencyCode}
               </span>
             </div>
-            {/* <WishlistButton
+            {process.env.COMMERCE_WISHLIST_ENABLED && (
+              <WishlistButton
                 className={s.wishlistButton}
                 productId={product.id}
-                variant={product.variants[0]}
-              /> */}
+                variant={product.variants[0] as any}
+              />
+            )}
           </div>
           <div className={s.imageContainer}>
             {product?.images && (

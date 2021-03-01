@@ -1,28 +1,39 @@
 import type { GetStaticPropsContext } from 'next'
-import { getConfig } from '@framework/api'
-import getAllPages from '@framework/common/get-all-pages'
-import useWishlist from '@framework/wishlist/use-wishlist'
-import { Layout } from '@components/common'
 import { Heart } from '@components/icons'
+import { Layout } from '@components/common'
 import { Text, Container } from '@components/ui'
-import { WishlistCard } from '@components/wishlist'
 import { defaultPageProps } from '@lib/defaults'
+import { getConfig } from '@framework/api'
 import { useCustomer } from '@framework/customer'
+import { WishlistCard } from '@components/wishlist'
+import useWishlist from '@framework/wishlist/use-wishlist'
+import getAllPages from '@framework/common/get-all-pages'
 
 export async function getStaticProps({
   preview,
   locale,
 }: GetStaticPropsContext) {
+  // Disabling page if Feature is not available
+  if (!process.env.COMMERCE_WISHLIST_ENABLED) {
+    return {
+      notFound: true,
+    }
+  }
+
   const config = getConfig({ locale })
   const { pages } = await getAllPages({ config, preview })
   return {
-    props: { ...defaultPageProps, pages },
+    props: {
+      pages,
+      ...defaultPageProps,
+    },
   }
 }
 
 export default function Wishlist() {
   const { data: customer } = useCustomer()
-  const { data, isLoading, isEmpty } = useWishlist()
+  // @ts-ignore Shopify - Fix this types
+  const { data, isLoading, isEmpty } = useWishlist({ includeProducts: true })
 
   return (
     <Container>
@@ -43,8 +54,9 @@ export default function Wishlist() {
             </div>
           ) : (
             data &&
+            // @ts-ignore Shopify - Fix this types
             data.items?.map((item) => (
-              <WishlistCard key={item.id} item={item} />
+              <WishlistCard key={item.id} product={item.product! as any} />
             ))
           )}
         </div>

@@ -42,6 +42,79 @@ Additionally, we need to ensure feature parity (not all providers have e.g. wish
 
 People actively working on this project: @okbel & @lfades.
 
+## Framework
+
+Framework is where the data comes from. It contains mostly hooks and functions.
+
+## Structure
+
+Main folder and its exposed functions
+
+- `product`
+  - usePrice
+  - useSearch
+  - getProduct
+  - getAllProducts
+- `wishlist`
+  - useWishlist
+  - useAddItem
+  - useRemoveItem
+- `auth`
+  - useLogin
+  - useLogout
+  - useSignup
+- `customer`
+  - useCustomer
+  - getCustomerId
+  - getCustomerWistlist
+- `cart`
+
+  - useCart
+  - useAddItem
+  - useRemoveItem
+  - useUpdateItem
+
+- `config.json`
+- README.md
+
+#### Example of correct usage of Commerce Framework
+
+```js
+import { useUI } from '@components/ui'
+import { useCustomer } from '@framework/customer'
+import { useWishlist, useAddItem, useRemoveItem } from '@framework/wishlist'
+```
+
+## Config
+
+### Features
+
+In order to make the UI entirely functional, we need to specify which features certain providers do not **provide**.
+
+**Disabling wishlist:**
+
+```
+{
+  "features": {
+    "wishlist": false
+  }
+}
+```
+
+## Contribute
+
+Our commitment to Open Source can be found [here](https://vercel.com/oss).
+
+1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your local device.
+2. Create a new branch `git checkout -b MY_BRANCH_NAME`
+3. Install yarn: `npm install -g yarn`
+4. Install the dependencies: `yarn`
+5. Duplicate `.env.template` and rename it to `.env.local`.
+6. Add proper store values to `.env.local`.
+7. Run `yarn dev` to build and watch for code changes
+8. The development branch is `canary` (this is the branch pull requests should be made against).
+   On a release, `canary` branch is rebased into `master`.
+
 ## Troubleshoot
 
 <details>
@@ -58,6 +131,7 @@ BIGCOMMERCE_STOREFRONT_API_TOKEN=<>
 BIGCOMMERCE_STORE_API_URL=<>
 BIGCOMMERCE_STORE_API_TOKEN=<>
 BIGCOMMERCE_STORE_API_CLIENT_ID=<>
+BIGCOMMERCE_CHANNEL_ID=<>
 ```
 
 If your project was started with a "Deploy with Vercel" button, you can use Vercel's CLI to retrieve these credentials.
@@ -78,57 +152,3 @@ After Email confirmation, Checkout should be manually enabled through BigCommerc
 <br>
 BigCommerce team has been notified and they plan to add more detailed about this subject.
 </details>
-
-## Contribute
-
-Our commitment to Open Source can be found [here](https://vercel.com/oss).
-
-1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your local device.
-2. Create a new branch `git checkout -b MY_BRANCH_NAME`
-3. Install yarn: `npm install -g yarn`
-4. Install the dependencies: `yarn`
-5. Duplicate `.env.template` and rename it to `.env.local`.
-6. Add proper store values to `.env.local`.
-7. Run `yarn dev` to build and watch for code changes
-8. The development branch is `canary` (this is the branch pull requests should be made against).
-   On a release, `canary` branch is rebased into `master`.
-
-## Framework
-
-Framework is where the data comes from. It contains mostly hooks and functions.
-
-## Structure
-
-Main folder and its exposed functions
-
-- `product`
-  - usePrice
-  - useSearch
-  - getProduct
-  - getAllProducts
-- `wishlist`
-  - useWishlist
-  - addWishlistItem
-  - removeWishlistItem
-- `auth`
-  - useLogin
-  - useLogout
-  - useSignup
-- `cart`
-
-  - useCart
-  - useAddItem
-  - useRemoveItem
-  - useCartActions
-  - useUpdateItem
-
-- `config.json`
-- README.md
-
-#### Example of correct usage of Commece Framework
-
-```js
-import { useUI } from '@components/ui'
-import { useCustomer } from '@framework/customer'
-import { useAddItem, useWishlist, useRemoveItem } from '@framework/wishlist'
-```
