@@ -18,6 +18,7 @@ export const getSiteInfoQuery = /* GraphQL */ `
               node {
                 id
                 name
+                permalink
               }
             }
           }
@@ -79,8 +80,27 @@ async function getSiteInfo({
     { variables }
   )
 
-  const categories = data.taxonomies?.edges[0]?.node?.taxons.edges
-  const brands = data.taxonomies?.edges[1]?.node?.taxons.edges
+  const categories = data.taxonomies?.edges[0]?.node?.taxons.edges.map(({ node }: any) => {
+    return { 
+      id: node.id,
+      entityId: node.id,
+      name: node.name,
+      path: node.permalink
+    }
+  })
+
+  log.warn(categories)
+
+  const brands = data.taxonomies?.edges[1]?.node?.taxons.edges.map(({ node }: any) => {
+    return { node: {
+      id: node.id,
+      entityId: node.id,
+      name: node.name,
+      path: node.permalink
+    }}
+  })
+
+  log.warn(brands)
 
   return {
     categories: (categories as RecursiveRequired<typeof categories>) ?? [],

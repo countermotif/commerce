@@ -164,7 +164,7 @@ const useSearch: HookHandler<
   SearchProductsInput
 > = {
   fetchOptions: {
-    url: '/api/bigcommerce/catalog/products',
+    url: '/api/solidus/catalog/products',
     method: 'GET',
   },
   fetcher({ input: { search, categoryId, brandId, sort }, options, fetch }) {
