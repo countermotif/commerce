@@ -19,6 +19,10 @@ export const getSiteInfoQuery = /* GraphQL */ `
                 id
                 name
                 permalink
+                parentTaxon {
+                  id
+                  name
+                }
               }
             }
           }
@@ -80,23 +84,29 @@ async function getSiteInfo({
     { variables }
   )
 
-  const categories = data.taxonomies?.edges[0]?.node?.taxons.edges.map(({ node }: any) => {
+  const filteredCategories = data.taxonomies?.edges[0]?.node?.taxons.edges.filter(({ node }: any) => {
+    return node.parentTaxon?.name == 'Categories'
+  })
+
+  const categories = filteredCategories.map(({ node }: any) => {
     return { 
       id: node.id,
       entityId: node.id,
       name: node.name,
-      path: node.permalink
+      path: node.permalink.replace('categories/','')
     }
   })
 
-  log.warn(categories)
+  const filteredBrands = data.taxonomies?.edges[1]?.node?.taxons.edges.filter(({ node }: any) => {
+    return node.parentTaxon?.name == 'Brand'
+  })
 
-  const brands = data.taxonomies?.edges[1]?.node?.taxons.edges.map(({ node }: any) => {
+  const brands = filteredBrands.map(({ node }: any) => {
     return { node: {
       id: node.id,
       entityId: node.id,
       name: node.name,
-      path: node.permalink
+      path: node.permalink.replace('brand/','designers/')
     }}
   })
 
