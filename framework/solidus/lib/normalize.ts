@@ -84,6 +84,7 @@ export function normalizeProduct(productNode: any): Product {
         : [],
     brand: '?',
     slug: slug,
+    path: slug,
     price: {
       value: Number(masterVariant?.defaultPrice.amount),
       retailPrice: Number(masterVariant?.defaultPrice.amount),
