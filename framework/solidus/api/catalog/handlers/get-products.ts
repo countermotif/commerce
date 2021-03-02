@@ -40,11 +40,8 @@ const getProducts: ProductsHandlers['getProducts'] = async ({
 
   const taxon = []
 
-  if (category && Number.isInteger(Number(category)))
-    taxon.push(category)
-
-  if (brand && Number.isInteger(Number(brand)))
-    taxon.push(brand)
+  if (category) taxon.push(category)
+  if (brand) taxon.push(brand)
 
   if (sort) {
     const [_sort, direction] = sort.split('-')
@@ -65,7 +62,7 @@ const getProducts: ProductsHandlers['getProducts'] = async ({
 
   const { data } = await config.fetch<RecursivePartial<GetAllProductsQuery>>(
     query,
-    { variables: { input: { keywords: search, taxon: taxon.length > 0 ? taxon : null } } }
+    { variables: { input: { keywords: search, taxon: category || brand || undefined } } }
   )
 
   const result = data.products?.edges

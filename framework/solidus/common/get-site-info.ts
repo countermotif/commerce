@@ -118,8 +118,6 @@ async function getSiteInfo({
     }}
   })
 
-  log.warn(brands)
-
   return {
     categories: (categories as RecursiveRequired<typeof categories>) ?? [],
     brands: filterEdges(brands as RecursiveRequired<typeof brands>),
