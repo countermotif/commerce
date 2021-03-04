@@ -2,7 +2,7 @@ import type { ProductNode } from '../../product/get-all-products'
 import type { RecursivePartial } from './types'
 
 export default function setProductLocaleMeta(
-  node: RecursivePartial<ProductNode>
+  node: any
 ) {
   if (node.localeMeta?.edges) {
     node.localeMeta.edges = node.localeMeta.edges.filter((edge) => {

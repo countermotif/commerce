@@ -5,7 +5,7 @@ import useAddItem, { UseAddItem } from '@commerce/cart/use-add-item'
 import { normalizeCart } from '../lib/normalize'
 import type {
   Cart,
-  BigcommerceCart,
+  SolidusCart,
   CartItemBody,
   AddCartItemBody,
 } from '../types'
@@ -28,7 +28,7 @@ export const handler: MutationHook<Cart, {}, CartItemBody> = {
       })
     }
 
-    const data = await fetch<BigcommerceCart, AddCartItemBody>({
+    const data = await fetch<SolidusCart, AddCartItemBody>({
       ...options,
       body: { item },
     })

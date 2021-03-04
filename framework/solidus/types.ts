@@ -2,7 +2,7 @@ import * as Core from '@commerce/types'
 
 // TODO: this type should match:
 // https://developer.bigcommerce.com/api-reference/cart-checkout/server-server-cart-api/cart/getacart#responses
-export type BigcommerceCart = {
+export type SolidusCart = {
   id: string
   parent_id?: string
   customer_id: number
@@ -20,6 +20,7 @@ export type BigcommerceCart = {
   }
   created_time: string
   discounts?: { id: number; discounted_amount: number }[]
+  currentOrder: any
   // TODO: add missing fields
 }
 
@@ -36,6 +37,10 @@ export interface LineItem extends Core.LineItem {}
 export type OptionSelections = {
   option_id: number
   option_value: number | string
+}
+
+export type Customer = {
+  id: number
 }
 
 export interface CartItemBody extends Core.CartItemBody {

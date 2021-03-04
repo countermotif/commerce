@@ -22,12 +22,6 @@ if (!API_URL) {
   )
 }
 
-// if (!API_TOKEN) {
-//   throw new Error(
-//     `The environment variable SOLIDUS_STOREFRONT_API_TOKEN is missing and it's required to access your store`
-//   )
-// }
-
 export class Config {
   private config: SolidusConfig
 
@@ -60,6 +54,11 @@ const config = new Config({
   cartCookieMaxAge: ONE_DAY * 30,
   fetch: fetchGraphqlApi,
   applyLocale: true,
+  storeChannelId: null,
+  storeApiUrl: null,
+  storeApiToken: null,
+  storeApiClientId: null,
+  storeApiFetch: null
 })
 
 export function getConfig(userConfig?: Partial<SolidusConfig>) {

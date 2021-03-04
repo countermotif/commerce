@@ -1,5 +1,5 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
-import { BigcommerceConfig, getConfig } from '..'
+import { SolidusConfig, getConfig } from '..'
 
 export type BigcommerceApiHandler<
   T = any,
@@ -8,7 +8,7 @@ export type BigcommerceApiHandler<
 > = (
   req: NextApiRequest,
   res: NextApiResponse<BigcommerceApiResponse<T>>,
-  config: BigcommerceConfig,
+  config: SolidusConfig,
   handlers: H,
   // Custom configs that may be used by a particular handler
   options: Options
@@ -17,7 +17,7 @@ export type BigcommerceApiHandler<
 export type BigcommerceHandler<T = any, Body = null> = (options: {
   req: NextApiRequest
   res: NextApiResponse<BigcommerceApiResponse<T>>
-  config: BigcommerceConfig
+  config: SolidusConfig
   body: Body
 }) => void | Promise<void>
 
@@ -44,7 +44,7 @@ export default function createApiHandler<
     operations,
     options,
   }: {
-    config?: BigcommerceConfig
+    config?: SolidusConfig
     operations?: Partial<H>
     options?: Options extends {} ? Partial<Options> : never
   } = {}): NextApiHandler {

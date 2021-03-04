@@ -11,6 +11,8 @@ import type {
 import getWishlist from './handlers/get-wishlist'
 import addItem from './handlers/add-item'
 import removeItem from './handlers/remove-item'
+import { Product, ProductVariant } from '@commerce/types'
+import { Customer } from '@framework/types'
 
 export type { Wishlist, WishlistItem }
 

@@ -10,7 +10,7 @@ export const getLoggedInCustomerQuery = /* GraphQL */ `
   }
 `
 
-export type Customer = NonNullable<GetLoggedInCustomerQuery['customer']>
+export type Customer = NonNullable<any>
 
 const getLoggedInCustomer: CustomersHandlers['getLoggedInCustomer'] = async ({
   req,
@@ -20,7 +20,7 @@ const getLoggedInCustomer: CustomersHandlers['getLoggedInCustomer'] = async ({
   const token = encodeURIComponent(req.cookies[config.customerCookie])
 
   if (req.cookies[config.customerCookie]) {
-    const { data } = await config.fetch<GetLoggedInCustomerQuery>(
+    const { data } = await config.fetch<any>(
       getLoggedInCustomerQuery,
       undefined,
       {

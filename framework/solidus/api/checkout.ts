@@ -29,36 +29,36 @@ const checkoutApi: BigcommerceApiHandler<any> = async (req, res, config) => {
       return
     }
 
-    // TODO: make the embedded checkout work too!
-    const html = `
-      <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Checkout</title>
-          <script src="https://checkout-sdk.bigcommerce.com/v1/loader.js"></script>
-          <script>
-            window.onload = function() {
-              checkoutKitLoader.load('checkout-sdk').then(function (service) {
-                service.embedCheckout({
-                  containerId: 'checkout',
-                  url: '${data.embedded_checkout_url}'
-                });
-              });
-            }
-          </script>
-        </head>
-        <body>
-          <div id="checkout"></div>
-        </body>
-      </html>
-    `
+    // // TODO: make the embedded checkout work too!
+    // const html = `
+    //   <!DOCTYPE html>
+    //     <html lang="en">
+    //     <head>
+    //       <meta charset="UTF-8">
+    //       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    //       <title>Checkout</title>
+    //       <script src="https://checkout-sdk.bigcommerce.com/v1/loader.js"></script>
+    //       <script>
+    //         window.onload = function() {
+    //           checkoutKitLoader.load('checkout-sdk').then(function (service) {
+    //             service.embedCheckout({
+    //               containerId: 'checkout',
+    //               url: '${data.embedded_checkout_url}'
+    //             });
+    //           });
+    //         }
+    //       </script>
+    //     </head>
+    //     <body>
+    //       <div id="checkout"></div>
+    //     </body>
+    //   </html>
+    // `
 
-    res.status(200)
-    res.setHeader('Content-Type', 'text/html')
-    res.write(html)
-    res.end()
+    // res.status(200)
+    // res.setHeader('Content-Type', 'text/html')
+    // res.write(html)
+    // res.end()
   } catch (error) {
     console.error(error)
 

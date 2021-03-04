@@ -32,7 +32,7 @@ const signup: SignupHandlers['signup'] = async ({
   // Passwords must be at least 7 characters and contain both alphabetic
   // and numeric characters.
 
-  const { data } = await config.fetch<RecursivePartial<typeof createUserMutation>>(
+  const { data } = await config.fetch<any>(
     createUserMutation,
     { 
       variables: {

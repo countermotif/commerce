@@ -1,4 +1,4 @@
-import { Product } from 'framework/types'
+import { Product } from '@commerce/types'
 import getAllProducts, { ProductEdge } from '../../../product/get-all-products'
 import type { ProductsHandlers } from '../products'
 import { productConnectionFragment } from '../../fragments/product'
@@ -53,20 +53,13 @@ const getProducts: ProductsHandlers['getProducts'] = async ({
     }
   }
 
-  // We only want the id of each product
-  //url.searchParams.set('include_fields', 'id')
-
-  //const { data } = await config.storeApiFetch<{ data: { id: number }[] }>(
-  //  url.pathname + url.search
-  //)
-
-  const { data } = await config.fetch<RecursivePartial<GetAllProductsQuery>>(
+  const { data } = await config.fetch(
     query,
     { variables: { input: { keywords: search, taxon: category || brand || undefined } } }
   )
 
   const result = data.products?.edges
-  const products = result.map(({ node }) => normalizeProduct(node as any))
+  const products: Product[] = result.map(({ node }) => normalizeProduct(node as any))
   const found = products.length > 0
 
   res.status(200).json({ data: { products, found } })

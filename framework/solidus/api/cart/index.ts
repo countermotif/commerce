@@ -9,7 +9,7 @@ import addItem from './handlers/add-item'
 import updateItem from './handlers/update-item'
 import removeItem from './handlers/remove-item'
 import type {
-  BigcommerceCart,
+  SolidusCart,
   GetCartHandlerBody,
   AddCartItemHandlerBody,
   UpdateCartItemHandlerBody,
@@ -17,16 +17,16 @@ import type {
 } from '../../types'
 
 export type CartHandlers = {
-  getCart: BigcommerceHandler<BigcommerceCart, GetCartHandlerBody>
-  addItem: BigcommerceHandler<BigcommerceCart, AddCartItemHandlerBody>
-  updateItem: BigcommerceHandler<BigcommerceCart, UpdateCartItemHandlerBody>
-  removeItem: BigcommerceHandler<BigcommerceCart, RemoveCartItemHandlerBody>
+  getCart: BigcommerceHandler<SolidusCart, GetCartHandlerBody>
+  addItem: BigcommerceHandler<SolidusCart, AddCartItemHandlerBody>
+  updateItem: BigcommerceHandler<SolidusCart, UpdateCartItemHandlerBody>
+  removeItem: BigcommerceHandler<SolidusCart, RemoveCartItemHandlerBody>
 }
 
 const METHODS = ['GET', 'POST', 'PUT', 'DELETE']
 
 // TODO: a complete implementation should have schema validation for `req.body`
-const cartApi: BigcommerceApiHandler<BigcommerceCart, CartHandlers> = async (
+const cartApi: BigcommerceApiHandler<SolidusCart, CartHandlers> = async (
   req,
   res,
   config,

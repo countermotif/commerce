@@ -5,7 +5,7 @@ import createApiHandler, {
 } from '../utils/create-api-handler'
 import { BigcommerceApiError } from '../utils/errors'
 import getProducts from './handlers/get-products'
-import { Product } from 'framework/types'
+import { Product } from '@commerce/types'
 
 export type SearchProductsData = {
   products: Product[]
