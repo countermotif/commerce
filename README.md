@@ -7,7 +7,8 @@ Start right now at [nextjs.org/commerce](https://nextjs.org/commerce)
 
 Demo live at: [demo.vercel.store](https://demo.vercel.store/)
 
-This project is currently <b>under development</b>.
+- Shopify Demo: https://shopify.demo.vercel.store/
+- BigCommerce Demo: https://bigcommerce.demo.vercel.store/
 
 ## Features
 
@@ -21,6 +22,7 @@ This project is currently <b>under development</b>.
 - Integrations - Integrate seamlessly with the most common ecommerce platforms.
 - Dark Mode Support
 
+<<<<<<< HEAD
 ## Work in progress
 
 We're using Github Projects to keep track of issues in progress and todo's. Here is our [Board](https://github.com/vercel/commerce/projects/1)
@@ -28,20 +30,118 @@ We're using Github Projects to keep track of issues in progress and todo's. Here
 ## Integrations
 
 Next.js Commerce integrates out-of-the-box with BigCommerce. We plan to support all major ecommerce backends.
+=======
+## Integrations
 
-## Goals
+Next.js Commerce integrates out-of-the-box with BigCommerce and Shopify. We plan to support all major ecommerce backends.
 
+## Considerations
+
+- `framework/commerce` contains all types, helpers and functions to be used as base to build a new **provider**.
+- **Providers** live under `framework`'s root folder and they will extend Next.js Commerce types and functionality.
+- **Features API** is to ensure feature parity between the UI and the Provider. The UI should update accordingly and no extra code should be bundled. All extra configuration for features will live under `features` in `commerce.config.json` and if needed it can also be accessed programatically.
+- Each **provider** should add its corresponding `next.config.js` and `commerce.config.json` adding specific data related to the provider. For example in case of BigCommerce, the images CDN and additional API routes.
+- **Providers don't depend on anything that's specific to the application they're used in**. They only depend on `framework/commerce`, on their own framework folder and on some dependencies included in `package.json`
+- We recommend that each **provider** ships with an `env.template` file and a `[readme.md](http://readme.md)` file.
+
+## Provider Structure
+
+Next.js Commerce provides a set of utilities and functions to create new providers. This is how a provider structure looks like.
+
+- `product`
+  - usePrice
+  - useSearch
+  - getProduct
+  - getAllProducts
+- `wishlist`
+  - useWishlist
+  - useAddItem
+  - useRemoveItem
+- `auth`
+  - useLogin
+  - useLogout
+  - useSignup
+- `customer`
+  - useCustomer
+  - getCustomerId
+  - getCustomerWistlist
+- `cart`
+  - useCart
+  - useAddItem
+  - useRemoveItem
+  - useUpdateItem
+- `env.template`
+- `provider.ts`
+- `commerce.config.json`
+- `next.config.js`
+- `README.md`
+
+## Configuration
+
+### How to change providers
+
+First, update the provider selected in `commerce.config.json`:
+
+```json
+{
+  "provider": "bigcommerce",
+  "features": {
+    "wishlist": true
+  }
+}
+```
+
+Then, change the paths defined in `tsconfig.json` and update the `@framework` paths to point to the right folder provider:
+
+```json
+"@framework": ["framework/bigcommerce"],
+"@framework/*": ["framework/bigcommerce/*"]
+```
+>>>>>>> upstream/master
+
+Make sure to add the environment variables required by the new provider.
+
+<<<<<<< HEAD
 - **Next.js Commerce** should have a completely data **agnostic** UI
 - **Aware of schema**: should ship with the right data schemas and types.
 - All providers should return the right data types and schemas to blend correctly with Next.js Commerce.
 - `@framework` will be the alias utilized in commerce and it will map to the ecommerce provider of preference- e.g BigCommerce, Shopify, Swell. All providers should expose the same standardized functions. _Note that the same applies for recipes using a CMS + an ecommerce provider._
+=======
+### Features
+>>>>>>> upstream/master
 
-There is a `framework` folder in the root folder that will contain multiple ecommerce providers.
+Every provider defines the features that it supports under `framework/{provider}/commerce.config.json`
 
-Additionally, we need to ensure feature parity (not all providers have e.g. wishlist) we will also have to build a feature API to disable/enable features in the UI.
+#### How to turn Features on and off
+
+> NOTE: The selected provider should support the feature that you are toggling. (This means that you can't turn wishlist on if the provider doesn't support this functionality out the box)
+
+- Open `commerce.config.json`
+- You'll see a config file like this:
+  ```json
+  {
+    "provider": "bigcommerce",
+    "features": {
+      "wishlist": false
+    }
+  }
+  ```
+- Turn wishlist on by setting wishlist to true.
+- Run the app and the wishlist functionality should be back on.
+
+### How to create a new provider
+
+We'd recommend to duplicate a provider folder and push your providers SDK.
+
+If you succeeded building a provider, submit a PR so we can all enjoy it.
+
+## Work in progress
+
+We're using Github Projects to keep track of issues in progress and todo's. Here is our [Board](https://github.com/vercel/commerce/projects/1)
 
 People actively working on this project: @okbel & @lfades.
 
+<<<<<<< HEAD
 ## Framework
 
 Framework is where the data comes from. It contains mostly hooks and functions.
@@ -101,6 +201,8 @@ In order to make the UI entirely functional, we need to specify which features c
 }
 ```
 
+=======
+>>>>>>> upstream/master
 ## Contribute
 
 Our commitment to Open Source can be found [here](https://vercel.com/oss).

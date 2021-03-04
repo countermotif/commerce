@@ -8,14 +8,12 @@ import { getConfig } from '@framework/api'
 import getAllProducts from '@framework/product/get-all-products'
 import getSiteInfo from '@framework/common/get-site-info'
 import getAllPages from '@framework/common/get-all-pages'
-import { Logger } from 'tslog'
 
 export async function getStaticProps({
   preview,
   locale,
 }: GetStaticPropsContext) {
   const config = getConfig({ locale })
-  const log: Logger = new Logger();
 
   const { products } = await getAllProducts({
     variables: { first: 12 },

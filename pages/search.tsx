@@ -70,7 +70,7 @@ export default function Search({
     (cat) => getSlug(cat.path) === category
   )
   const activeBrand = brands.find(
-    (b) => getSlug(b.node.path) === `brands/${brand}`
+    (b) => getSlug(b.node.path) === `designers/${brand}`
   )?.node
 
   const { data } = useSearch({

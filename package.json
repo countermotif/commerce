@@ -92,7 +92,10 @@
       "git add"
     ]
   },
+<<<<<<< HEAD
   "browser": { "fs": false, "path": false, "os": false },
+=======
+>>>>>>> upstream/master
   "next-unused": {
     "alias": {
       "@lib/*": [
