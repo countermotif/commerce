@@ -92,7 +92,11 @@
       "git add"
     ]
   },
-  "browser": { "fs": false, "path": false, "os": false },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  },
   "next-unused": {
     "alias": {
       "@lib/*": [
