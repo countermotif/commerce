@@ -13,7 +13,7 @@ import { normalizeCart } from '../lib/normalize'
 import type {
   UpdateCartItemBody,
   Cart,
-  BigcommerceCart,
+  SolidusCart,
   LineItem,
 } from '../types'
 import { handler as removeItemHandler } from './use-remove-item'
@@ -50,7 +50,7 @@ export const handler = {
       })
     }
 
-    const data = await fetch<BigcommerceCart, UpdateCartItemBody>({
+    const data = await fetch<SolidusCart, UpdateCartItemBody>({
       ...options,
       body: { itemId, item },
     })

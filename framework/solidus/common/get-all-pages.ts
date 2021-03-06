@@ -30,8 +30,9 @@ async function getAllPages({
   config = getConfig(config)
   // RecursivePartial forces the method to check for every prop in the data, which is
   // required in case there's a custom `url`
-  const { data } = []
-  const pages = (data as RecursiveRequired<typeof data>) ?? []
+  const data = []
+  // const pages = (data as RecursiveRequired<typeof data>) ?? []
+  const pages = []
 
   return {
     pages: preview ? pages : pages.filter((p) => p.is_visible),

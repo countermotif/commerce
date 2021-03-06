@@ -33,11 +33,11 @@ export const getSiteInfoQuery = /* GraphQL */ `
 `
 
 export type CategoriesTree = NonNullable<
-  GetSiteInfoQuery['data']['taxonomies']['edges'][1]['node']['taxons']
+  any['data']['taxonomies']['edges'][1]['node']['taxons']
 >
 
 export type BrandEdge = NonNullable<
-  NonNullable<GetSiteInfoQuery['data']['taxonomies']['edges'][0]['node']['taxons']['edges']>[0]
+  NonNullable<any['data']['taxonomies']['edges'][0]['node']['taxons']['edges']>[0]
 >
 
 export type Brands = BrandEdge[]
@@ -79,7 +79,7 @@ async function getSiteInfo({
   config = getConfig(config)
   // RecursivePartial forces the method to check for every prop in the data, which is
   // required in case there's a custom `query`
-  const { data } = await config.fetch<RecursivePartial<GetSiteInfoQuery>>(
+  const { data } = await config.fetch(
     query,
     { variables }
   )
@@ -119,8 +119,8 @@ async function getSiteInfo({
   })
 
   return {
-    categories: (categories as RecursiveRequired<typeof categories>) ?? [],
-    brands: filterEdges(brands as RecursiveRequired<typeof brands>),
+    categories: categories ?? [],
+    brands: filterEdges(brands),
   }
 }
 

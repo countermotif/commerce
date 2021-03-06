@@ -12,7 +12,7 @@ import { normalizeCart } from '../lib/normalize'
 import type {
   RemoveCartItemBody,
   Cart,
-  BigcommerceCart,
+  SolidusCart,
   LineItem,
 } from '../types'
 import useCart from './use-cart'
@@ -37,7 +37,7 @@ export const handler = {
     options,
     fetch,
   }: HookFetcherContext<RemoveCartItemBody>) {
-    const data = await fetch<BigcommerceCart>({
+    const data = await fetch<SolidusCart>({
       ...options,
       body: { itemId },
     })

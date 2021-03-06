@@ -12,7 +12,9 @@ export type SolidusCart = {
   base_amount: number
   discount_amount: number
   cart_amount: number
-  line_items: {
+  lineItems: {
+    edges: any[]
+    options: any[]
     custom_items: any[]
     digital_items: any[]
     gift_certificates: any[]
@@ -21,14 +23,34 @@ export type SolidusCart = {
   created_time: string
   discounts?: { id: number; discounted_amount: number }[]
   currentOrder: any
+  createdAt: string
+  includedTaxTotal: boolean
+  itemTotal: number
+  promoTotal: number
+  total: number
   // TODO: add missing fields
 }
 
-export interface Cart extends Core.Cart {
+export type Cart = Core.Cart & {
   lineItems: LineItem[]
 }
 
-export interface LineItem extends Core.LineItem {}
+export type LineItem = {
+  id: string
+  variantId: string
+  productId: string
+  name: string
+  quantity: number
+  discounts: Core.Discount[]
+  // A human-friendly unique string automatically generated from the product’s name
+  path: string
+  variant: Core.ProductVariant
+  options: any
+}
+
+export type Customer = {
+  id: string
+}
 
 /**
  * Cart mutations
@@ -39,29 +61,21 @@ export type OptionSelections = {
   option_value: number | string
 }
 
-export type Customer = {
-  id: number
-}
-
-export interface CartItemBody extends Core.CartItemBody {
+export type CartItemBody = Core.CartItemBody & {
   productId: string // The product id is always required for BC
   optionSelections?: OptionSelections
 }
 
-export interface GetCartHandlerBody extends Core.GetCartHandlerBody {}
+export type GetCartHandlerBody = Core.GetCartHandlerBody
 
-export interface AddCartItemBody extends Core.AddCartItemBody<CartItemBody> {}
+export type AddCartItemBody = Core.AddCartItemBody<CartItemBody>
 
-export interface AddCartItemHandlerBody
-  extends Core.AddCartItemHandlerBody<CartItemBody> {}
+export type AddCartItemHandlerBody = Core.AddCartItemHandlerBody<CartItemBody>
 
-export interface UpdateCartItemBody
-  extends Core.UpdateCartItemBody<CartItemBody> {}
+export type UpdateCartItemBody = Core.UpdateCartItemBody<CartItemBody>
 
-export interface UpdateCartItemHandlerBody
-  extends Core.UpdateCartItemHandlerBody<CartItemBody> {}
+export type UpdateCartItemHandlerBody = Core.UpdateCartItemHandlerBody<CartItemBody>
 
-export interface RemoveCartItemBody extends Core.RemoveCartItemBody {}
+export type RemoveCartItemBody = Core.RemoveCartItemBody
 
-export interface RemoveCartItemHandlerBody
-  extends Core.RemoveCartItemHandlerBody {}
+export type RemoveCartItemHandlerBody = Core.RemoveCartItemHandlerBody

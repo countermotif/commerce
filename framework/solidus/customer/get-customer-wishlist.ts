@@ -1,6 +1,6 @@
 import type { RecursivePartial, RecursiveRequired } from '../api/utils/types'
 import { definitions } from '../api/definitions/wishlist'
-import { BigcommerceConfig, getConfig } from '../api'
+import { SolidusConfig, getConfig } from '../api'
 import getAllProducts, { ProductEdge } from '../product/get-all-products'
 
 export type Wishlist = Omit<definitions['wishlist_Full'], 'items'> & {
@@ -23,7 +23,7 @@ export type GetCustomerWishlistVariables = {
 
 async function getCustomerWishlist(opts: {
   variables: GetCustomerWishlistVariables
-  config?: BigcommerceConfig
+  config?: SolidusConfig
   includeProducts?: boolean
 }): Promise<GetCustomerWishlistResult>
 
@@ -33,7 +33,7 @@ async function getCustomerWishlist<
 >(opts: {
   url: string
   variables: V
-  config?: BigcommerceConfig
+  config?: SolidusConfig
   includeProducts?: boolean
 }): Promise<GetCustomerWishlistResult<T>>
 
@@ -44,7 +44,7 @@ async function getCustomerWishlist({
 }: {
   url?: string
   variables: GetCustomerWishlistVariables
-  config?: BigcommerceConfig
+  config?: SolidusConfig
   includeProducts?: boolean
 }): Promise<GetCustomerWishlistResult> {
   config = getConfig(config)

@@ -1,5 +1,5 @@
 import type { RecursivePartial, RecursiveRequired } from '../api/utils/types'
-import { BigcommerceConfig, getConfig } from '../api'
+import { SolidusConfig, getConfig } from '../api'
 import { definitions } from '../api/definitions/store-content'
 
 export type Page = definitions['page_Full']
@@ -13,14 +13,14 @@ export type PageVariables = {
 async function getPage(opts: {
   url?: string
   variables: PageVariables
-  config?: BigcommerceConfig
+  config?: SolidusConfig
   preview?: boolean
 }): Promise<GetPageResult>
 
 async function getPage<T extends { page?: any }, V = any>(opts: {
   url: string
   variables: V
-  config?: BigcommerceConfig
+  config?: SolidusConfig
   preview?: boolean
 }): Promise<GetPageResult<T>>
 
@@ -32,7 +32,7 @@ async function getPage({
 }: {
   url?: string
   variables: PageVariables
-  config?: BigcommerceConfig
+  config?: SolidusConfig
   preview?: boolean
 }): Promise<GetPageResult> {
   config = getConfig(config)

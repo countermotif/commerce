@@ -1,4 +1,5 @@
-import type { Cart, BigcommerceCart, LineItem } from '../types'
+import type { Cart, SolidusCart, LineItem } from '../types'
+import type { Product } from '@commerce/types'
 import update from './immutability'
 
 function normalizeOptionTypes(optionType: any) {
@@ -103,21 +104,19 @@ export function normalizeProductPath(product) {
   })
 }
 
-export function normalizeCart(data: BigcommerceCart): Cart {
+export function normalizeCart(data: SolidusCart): Cart {
   return {
     id: data.id,
     customerId: undefined,
     email: data.email,
     createdAt: data.createdAt,
-    currency: { 
-      code: data.currency 
-    },
+    currency: data.currency,
     taxesIncluded: data.includedTaxTotal,
     lineItems: data.lineItems?.edges.map(({ node }: any) => normalizeLineItem(node)),
     lineItemsSubtotalPrice: data.itemTotal,
     subtotalPrice: Number(data.itemTotal) + Number(data.promoTotal),
     totalPrice: data.total,
-    discounts: [data.promoTotal],
+    discounts: null,
   }
 }
 

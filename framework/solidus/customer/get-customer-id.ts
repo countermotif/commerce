@@ -1,5 +1,5 @@
 import { GetCustomerIdQuery } from '../schema'
-import { BigcommerceConfig, getConfig } from '../api'
+import { SolidusConfig, getConfig } from '../api'
 
 export const getCustomerIdQuery = /* GraphQL */ `
   query getCustomerId {
@@ -14,7 +14,7 @@ async function getCustomerId({
   config,
 }: {
   customerToken: string
-  config?: BigcommerceConfig
+  config?: SolidusConfig
 }): Promise<number | undefined> {
   config = getConfig(config)
 
