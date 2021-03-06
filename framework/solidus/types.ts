@@ -14,7 +14,7 @@ export type SolidusCart = {
   cart_amount: number
   lineItems: {
     edges: any[]
-    options: any[]
+    options?: any[]
     custom_items: any[]
     digital_items: any[]
     gift_certificates: any[]
@@ -32,7 +32,7 @@ export type SolidusCart = {
 }
 
 export type Cart = Core.Cart & {
-  lineItems: LineItem[]
+  lineItems: any[]
 }
 
 export type LineItem = {
@@ -45,7 +45,7 @@ export type LineItem = {
   // A human-friendly unique string automatically generated from the product’s name
   path: string
   variant: Core.ProductVariant
-  options: any
+  options?: any
 }
 
 export type Customer = {

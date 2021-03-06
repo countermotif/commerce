@@ -22,7 +22,7 @@ export const getAllProductPathsQuery = /* GraphQL */ `
 `
 
 export type ProductPath = NonNullable<
-  NonNullable<GetAllProductPathsQuery['currentStore']['products']['edges']>[0]
+  NonNullable<any['currentStore']['products']['edges']>[0]
 >
 
 export type ProductPaths = ProductPath[]
@@ -59,9 +59,7 @@ async function getAllProductPaths({
   config = getConfig(config)
   // RecursivePartial forces the method to check for every prop in the data, which is
   // required in case there's a custom `query`
-  const { data } = await config.fetch<
-    RecursivePartial<GetAllProductPathsQuery>
-  >(query, { variables })
+  const { data } = await config.fetch(query, { variables })
   const products = data.currentStore?.products?.edges
 
   return {

@@ -8,6 +8,8 @@ import setProductLocaleMeta from '../api/utils/set-product-locale-meta'
 import { productConnectionFragment } from '../api/fragments/product'
 import { SolidusConfig, getConfig } from '../api'
 import { normalizeProduct } from '../lib/normalize'
+import { Product } from '@commerce/types'
+
 
 export const getAllProductsQuery = /* GraphQL */ `
   query getAllProducts(
@@ -37,7 +39,7 @@ export const getAllProductsQuery = /* GraphQL */ `
 `
 
 export type ProductEdge = NonNullable<
-  NonNullable<GetAllProductsQuery['currentStore']['products']['edges']>[0]
+  NonNullable<any['currentStore']['products']['edges']>[0]
 >
 
 export type ProductNode = ProductEdge['node']
@@ -111,12 +113,12 @@ async function getAllProducts({
 
   // RecursivePartial forces the method to check for every prop in the data, which is
   // required in case there's a custom `query`
-  const { data } = await config.fetch<RecursivePartial<GetAllProductsQuery>>(
+  const { data } = await config.fetch(
     query,
     { variables }
   )
   const edges = data.currentStore?.[field]?.edges
-  const products = filterEdges(edges as RecursiveRequired<typeof edges>)
+  const products = filterEdges(edges)
 
   if (locale && config.applyLocale) {
     products.forEach((product: RecursivePartial<ProductEdge>) => {

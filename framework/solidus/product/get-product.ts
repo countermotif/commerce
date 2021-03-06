@@ -4,6 +4,7 @@ import { productInfoFragment } from '../api/fragments/product'
 import { SolidusConfig, getConfig } from '../api'
 import { normalizeProduct } from '@framework/lib/normalize'
 import { Logger } from 'tslog'
+import { Product } from '@commerce/types'
 
 export const getProductQuery = /* GraphQL */ `
   query getProduct(
@@ -62,7 +63,7 @@ async function getProduct({
     hasLocale: !!locale,
     path: slug ? slug : vars.path!,
   }
-  const { data } = await config.fetch<GetProductQuery>(query, { variables })
+  const { data } = await config.fetch(query, { variables })
 
   const product = data.productBySlug
 
