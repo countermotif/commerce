@@ -106,13 +106,13 @@ export function normalizeProductPath(product) {
   })
 }
 
-export function normalizeCart(data: SolidusCart): Cart {
+export function normalizeCart(data: any): Cart {
   return {
     id: data.id,
     customerId: undefined,
     email: data.email,
     createdAt: data.createdAt,
-    currency: data.currency,
+    currency: { code: data.currency },
     taxesIncluded: data.includedTaxTotal,
     lineItems: data.lineItems?.edges.map(({ node }: any) => normalizeLineItem(node)),
     lineItemsSubtotalPrice: data.itemTotal,
@@ -123,6 +123,8 @@ export function normalizeCart(data: SolidusCart): Cart {
 }
 
 function normalizeLineItem(item: any): LineItem {
+  const image_host = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? 'http://localhost:5555/' : 'https://amazing-store-ad-bibendum.herokuapp.com/' 
+
   return {
     id: item.id,
     variantId: String(item.variant.id),
@@ -134,7 +136,7 @@ function normalizeLineItem(item: any): LineItem {
       sku: item.variant.sku,
       name: item.variant.product.name,
       image: {
-        url: host + item.variant.images.edges[0].node.largeUrl,
+        url: image_host + item.variant.images.edges[0].node.largeUrl,
       },
       requiresShipping: true,
       price: item.price,

@@ -20,11 +20,13 @@ const checkoutApi: BigcommerceApiHandler<any> = async (req, res, config) => {
       return
     }
 
+    const checkout_host = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? 'http://localhost:5555/' : 'https://amazing-store-ad-bibendum.herokuapp.com/' 
+
     if (fullCheckout) {
       if (cookies[config.customerCookie]) {
-        res.redirect(`http://localhost:5555/orders/${cartId}/checkout`)
+        res.redirect(`${checkout_host}orders/${cartId}/checkout`)
       } else {
-        res.redirect(`http://localhost:5555/orders/${cartId}/checkout`)
+        res.redirect(`${checkout_host}orders/${cartId}/checkout`)
       }
       return
     }
