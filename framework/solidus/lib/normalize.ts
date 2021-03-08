@@ -2,6 +2,8 @@ import type { Cart, SolidusCart, LineItem } from '../types'
 import type { Product } from '@commerce/types'
 import update from './immutability'
 
+const host = process.env.SOLIDUS_STOREFRONT_HOST
+
 function normalizeOptionTypes(optionType: any) {
   const {
     id,
@@ -70,8 +72,8 @@ export function normalizeProduct(productNode: any): Product {
     name: name,
     description: description,
     images: masterVariant.images?.edges?.length > 0
-      ? masterVariant.images.edges?.map(({ node: { largeUrl, alt } }: any) => ({url: 'http://localhost:5555/' + largeUrl, alt: alt }))
-      : variants.edges[0]?.node?.images.edges?.map(({ node: { largeUrl, alt } }: any) => ({url: 'http://localhost:5555/' + largeUrl, alt: alt })),
+      ? masterVariant.images.edges?.map(({ node: { largeUrl, alt } }: any) => ({url: host + largeUrl, alt: alt }))
+      : variants.edges[0]?.node?.images.edges?.map(({ node: { largeUrl, alt } }: any) => ({url: host + largeUrl, alt: alt })),
     variants: variants?.edges?.length > 0
       ? variants.edges?.map(({ node: { id, optionValues } }: any) => ({
         id: id,
@@ -132,7 +134,7 @@ function normalizeLineItem(item: any): LineItem {
       sku: item.variant.sku,
       name: item.variant.product.name,
       image: {
-        url: 'http://localhost:5555/' + item.variant.images.edges[0].node.largeUrl,
+        url: host + item.variant.images.edges[0].node.largeUrl,
       },
       requiresShipping: true,
       price: item.price,
