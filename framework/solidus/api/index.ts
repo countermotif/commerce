@@ -28,8 +28,8 @@ export class Config {
   constructor(config: Omit<SolidusConfig, 'customerCookie'>) {
     this.config = {
       ...config,
-      // The customerCookie is not customizable for now, BC sets the cookie and it's
-      // not important to rename it
+      // Rails cookie name. Change in application.rb (Rails 6)
+      //
       customerCookie: 'session',
     }
   }
@@ -50,7 +50,7 @@ const ONE_DAY = 60 * 60 * 24
 const config = new Config({
   commerceUrl: API_URL,
   apiToken: null,
-  cartCookie: process.env.SOLIDUS_CART_COOKIE ?? 'bc_cartId',
+  cartCookie: process.env.SOLIDUS_CART_COOKIE ?? 'solidus_guestToken',
   cartCookieMaxAge: ONE_DAY * 30,
   fetch: fetchGraphqlApi,
   applyLocale: true,

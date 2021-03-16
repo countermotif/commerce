@@ -11,7 +11,7 @@ export type { SolidusProvider }
 
 export const solidusConfig: CommerceConfig = {
   locale: 'en-us',
-  cartCookie: 'bc_cartId',
+  cartCookie: 'solidus_guestToken',
 }
 
 export type SolidusConfig = Partial<CommerceConfig>

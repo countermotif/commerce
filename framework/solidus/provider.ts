@@ -18,7 +18,7 @@ import fetcher from './fetcher'
 
 export const solidusProvider = {
   locale: 'en-us',
-  cartCookie: 'bc_cartId',
+  cartCookie: 'solidus_guestToken',
   fetcher,
   cart: { useCart, useAddItem, useUpdateItem, useRemoveItem },
   wishlist: {
