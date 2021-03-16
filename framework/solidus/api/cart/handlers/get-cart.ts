@@ -1,5 +1,5 @@
 import type { SolidusCart } from '../../../types'
-import { BigcommerceApiError } from '../../utils/errors'
+import { SolidusApiError } from '../../utils/errors'
 import getCartCookie from '../../utils/get-cart-cookie'
 import type { CartHandlers } from '../'
 import { getOrder } from '../../mutations/cart'
@@ -24,7 +24,7 @@ const getCart: CartHandlers['getCart'] = async ({
         }
       )
     } catch (error) {
-      if (error instanceof BigcommerceApiError && error.status === 404) {
+      if (error instanceof SolidusApiError && error.status === 404) {
         // Remove the cookie if it exists but the cart wasn't found
         res.setHeader('Set-Cookie', getCartCookie(config.cartCookie))
       } else {

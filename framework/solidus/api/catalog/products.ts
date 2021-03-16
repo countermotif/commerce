@@ -1,9 +1,9 @@
 import isAllowedMethod from '../utils/is-allowed-method'
 import createApiHandler, {
-  BigcommerceApiHandler,
-  BigcommerceHandler,
+  SolidusApiHandler,
+  SolidusHandler,
 } from '../utils/create-api-handler'
-import { BigcommerceApiError } from '../utils/errors'
+import { SolidusApiError } from '../utils/errors'
 import getProducts from './handlers/get-products'
 import { Product } from '@commerce/types'
 
@@ -13,7 +13,7 @@ export type SearchProductsData = {
 }
 
 export type ProductsHandlers = {
-  getProducts: BigcommerceHandler<
+  getProducts: SolidusHandler<
     SearchProductsData,
     { search?: string; category?: string; brand?: string; sort?: string }
   >
@@ -22,7 +22,7 @@ export type ProductsHandlers = {
 const METHODS = ['GET']
 
 // TODO(lf): a complete implementation should have schema validation for `req.body`
-const productsApi: BigcommerceApiHandler<
+const productsApi: SolidusApiHandler<
   SearchProductsData,
   ProductsHandlers
 > = async (req, res, config, handlers) => {
@@ -35,8 +35,8 @@ const productsApi: BigcommerceApiHandler<
     console.error(error)
 
     const message =
-      error instanceof BigcommerceApiError
-        ? 'An unexpected error ocurred with the Bigcommerce API'
+      error instanceof SolidusApiError
+        ? 'An unexpected error ocurred with the Solidus API'
         : 'An unexpected error ocurred'
 
     res.status(500).json({ data: null, errors: [{ message }] })

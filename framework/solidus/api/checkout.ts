@@ -1,14 +1,14 @@
 import isAllowedMethod from './utils/is-allowed-method'
 import createApiHandler, {
-  BigcommerceApiHandler,
+  SolidusApiHandler,
 } from './utils/create-api-handler'
-import { BigcommerceApiError } from './utils/errors'
+import { SolidusApiError } from './utils/errors'
 
 const METHODS = ['GET']
 const fullCheckout = true
 
 // TODO: a complete implementation should have schema validation for `req.body`
-const checkoutApi: BigcommerceApiHandler<any> = async (req, res, config) => {
+const checkoutApi: SolidusApiHandler<any> = async (req, res, config) => {
   if (!isAllowedMethod(req, res, METHODS)) return
 
   const { cookies } = req
@@ -65,8 +65,8 @@ const checkoutApi: BigcommerceApiHandler<any> = async (req, res, config) => {
     console.error(error)
 
     const message =
-      error instanceof BigcommerceApiError
-        ? 'An unexpected error ocurred with the Bigcommerce API'
+      error instanceof SolidusApiError
+        ? 'An unexpected error ocurred with the Solidus API'
         : 'An unexpected error ocurred'
 
     res.status(500).json({ data: null, errors: [{ message }] })

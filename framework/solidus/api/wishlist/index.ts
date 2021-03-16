@@ -1,9 +1,9 @@
 import isAllowedMethod from '../utils/is-allowed-method'
 import createApiHandler, {
-  BigcommerceApiHandler,
-  BigcommerceHandler,
+  SolidusApiHandler,
+  SolidusHandler,
 } from '../utils/create-api-handler'
-import { BigcommerceApiError } from '../utils/errors'
+import { SolidusApiError } from '../utils/errors'
 import type {
   Wishlist,
   WishlistItem,
@@ -35,15 +35,15 @@ export type WishlistBody = {
 export type AddWishlistBody = { wishlist: WishlistBody }
 
 export type WishlistHandlers = {
-  getWishlist: BigcommerceHandler<
+  getWishlist: SolidusHandler<
     Wishlist,
     { customerToken?: string; includeProducts?: boolean }
   >
-  addItem: BigcommerceHandler<
+  addItem: SolidusHandler<
     Wishlist,
     { customerToken?: string } & Partial<AddItemBody>
   >
-  removeItem: BigcommerceHandler<
+  removeItem: SolidusHandler<
     Wishlist,
     { customerToken?: string } & Partial<RemoveItemBody>
   >
@@ -52,7 +52,7 @@ export type WishlistHandlers = {
 const METHODS = ['GET', 'POST', 'DELETE']
 
 // TODO: a complete implementation should have schema validation for `req.body`
-const wishlistApi: BigcommerceApiHandler<Wishlist, WishlistHandlers> = async (
+const wishlistApi: SolidusApiHandler<Wishlist, WishlistHandlers> = async (
   req,
   res,
   config,
@@ -88,8 +88,8 @@ const wishlistApi: BigcommerceApiHandler<Wishlist, WishlistHandlers> = async (
     console.error(error)
 
     const message =
-      error instanceof BigcommerceApiError
-        ? 'An unexpected error ocurred with the Bigcommerce API'
+      error instanceof SolidusApiError
+        ? 'An unexpected error ocurred with the Solidus API'
         : 'An unexpected error ocurred'
 
     res.status(500).json({ data: null, errors: [{ message }] })

@@ -1,41 +1,41 @@
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import { SolidusConfig, getConfig } from '..'
 
-export type BigcommerceApiHandler<
+export type SolidusApiHandler<
   T = any,
-  H extends BigcommerceHandlers = {},
+  H extends SolidusHandlers = {},
   Options extends {} = {}
 > = (
   req: NextApiRequest,
-  res: NextApiResponse<BigcommerceApiResponse<T>>,
+  res: NextApiResponse<SolidusApiResponse<T>>,
   config: SolidusConfig,
   handlers: H,
   // Custom configs that may be used by a particular handler
   options: Options
 ) => void | Promise<void>
 
-export type BigcommerceHandler<T = any, Body = null> = (options: {
+export type SolidusHandler<T = any, Body = null> = (options: {
   req: NextApiRequest
-  res: NextApiResponse<BigcommerceApiResponse<T>>
+  res: NextApiResponse<SolidusApiResponse<T>>
   config: SolidusConfig
   body: Body
 }) => void | Promise<void>
 
-export type BigcommerceHandlers<T = any> = {
-  [k: string]: BigcommerceHandler<T, any>
+export type SolidusHandlers<T = any> = {
+  [k: string]: SolidusHandler<T, any>
 }
 
-export type BigcommerceApiResponse<T> = {
+export type SolidusApiResponse<T> = {
   data: T | null
   errors?: { message: string; code?: string }[]
 }
 
 export default function createApiHandler<
   T = any,
-  H extends BigcommerceHandlers = {},
+  H extends SolidusHandlers = {},
   Options extends {} = {}
 >(
-  handler: BigcommerceApiHandler<T, H, Options>,
+  handler: SolidusApiHandler<T, H, Options>,
   handlers: H,
   defaultOptions: Options
 ) {

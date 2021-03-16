@@ -1,9 +1,9 @@
 import createApiHandler, {
-  BigcommerceApiHandler,
-  BigcommerceHandler,
+  SolidusApiHandler,
+  SolidusHandler,
 } from '../utils/create-api-handler'
 import isAllowedMethod from '../utils/is-allowed-method'
-import { BigcommerceApiError } from '../utils/errors'
+import { SolidusApiError } from '../utils/errors'
 import signup from './handlers/signup'
 
 export type SignupBody = {
@@ -14,12 +14,12 @@ export type SignupBody = {
 }
 
 export type SignupHandlers = {
-  signup: BigcommerceHandler<null, { cartId?: string } & Partial<SignupBody>>
+  signup: SolidusHandler<null, { cartId?: string } & Partial<SignupBody>>
 }
 
 const METHODS = ['POST']
 
-const signupApi: BigcommerceApiHandler<null, SignupHandlers> = async (
+const signupApi: SolidusApiHandler<null, SignupHandlers> = async (
   req,
   res,
   config,
@@ -37,8 +37,8 @@ const signupApi: BigcommerceApiHandler<null, SignupHandlers> = async (
     console.error(error)
 
     const message =
-      error instanceof BigcommerceApiError
-        ? 'An unexpected error ocurred with the Bigcommerce API'
+      error instanceof SolidusApiError
+        ? 'An unexpected error ocurred with the Solidus API'
         : 'An unexpected error ocurred'
 
     res.status(500).json({ data: null, errors: [{ message }] })

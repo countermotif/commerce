@@ -1,9 +1,9 @@
 import isAllowedMethod from '../utils/is-allowed-method'
 import createApiHandler, {
-  BigcommerceApiHandler,
-  BigcommerceHandler,
+  SolidusApiHandler,
+  SolidusHandler,
 } from '../utils/create-api-handler'
-import { BigcommerceApiError } from '../utils/errors'
+import { SolidusApiError } from '../utils/errors'
 import getCart from './handlers/get-cart'
 import addItem from './handlers/add-item'
 import updateItem from './handlers/update-item'
@@ -17,16 +17,16 @@ import type {
 } from '../../types'
 
 export type CartHandlers = {
-  getCart: BigcommerceHandler<SolidusCart, GetCartHandlerBody>
-  addItem: BigcommerceHandler<SolidusCart, AddCartItemHandlerBody>
-  updateItem: BigcommerceHandler<SolidusCart, UpdateCartItemHandlerBody>
-  removeItem: BigcommerceHandler<SolidusCart, RemoveCartItemHandlerBody>
+  getCart: SolidusHandler<SolidusCart, GetCartHandlerBody>
+  addItem: SolidusHandler<SolidusCart, AddCartItemHandlerBody>
+  updateItem: SolidusHandler<SolidusCart, UpdateCartItemHandlerBody>
+  removeItem: SolidusHandler<SolidusCart, RemoveCartItemHandlerBody>
 }
 
 const METHODS = ['GET', 'POST', 'PUT', 'DELETE']
 
 // TODO: a complete implementation should have schema validation for `req.body`
-const cartApi: BigcommerceApiHandler<SolidusCart, CartHandlers> = async (
+const cartApi: SolidusApiHandler<SolidusCart, CartHandlers> = async (
   req,
   res,
   config,
@@ -65,8 +65,8 @@ const cartApi: BigcommerceApiHandler<SolidusCart, CartHandlers> = async (
     console.error(error)
 
     const message =
-      error instanceof BigcommerceApiError
-        ? 'An unexpected error ocurred with the Bigcommerce API'
+      error instanceof SolidusApiError
+        ? 'An unexpected error ocurred with the Solidus API'
         : 'An unexpected error ocurred'
 
     res.status(500).json({ data: null, errors: [{ message }] })

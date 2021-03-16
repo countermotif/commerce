@@ -1,4 +1,4 @@
-import { BigcommerceApiError } from '../../utils/errors'
+import { SolidusApiError } from '../../utils/errors'
 import login from '../../../auth/login'
 import { SignupHandlers } from '../signup'
 import type { RecursivePartial } from '../../utils/types'
@@ -32,7 +32,7 @@ const signup: SignupHandlers['signup'] = async ({
   // Passwords must be at least 7 characters and contain both alphabetic
   // and numeric characters.
 
-  const { data } = await config.fetch<any>(
+  const { data } = await config.fetch(
     createUserMutation,
     { 
       variables: {

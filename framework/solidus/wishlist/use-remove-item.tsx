@@ -18,7 +18,7 @@ export const handler: MutationHook<
   RemoveItemBody
 > = {
   fetchOptions: {
-    url: '/api/bigcommerce/wishlist',
+    url: '/api/solidus/wishlist',
     method: 'DELETE',
   },
   useHook: ({ fetch }) => ({ wishlist } = {}) => {

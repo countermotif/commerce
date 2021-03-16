@@ -10,7 +10,7 @@ export default useAddItem as UseAddItem<typeof handler>
 
 export const handler: MutationHook<any, {}, ItemBody, AddItemBody> = {
   fetchOptions: {
-    url: '/api/bigcommerce/wishlist',
+    url: '/api/solidus/wishlist',
     method: 'POST',
   },
   useHook: ({ fetch }) => () => {

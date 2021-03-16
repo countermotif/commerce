@@ -15,7 +15,7 @@ export const handler: SWRHook<
   { isEmpty?: boolean }
 > = {
   fetchOptions: {
-    url: '/api/bigcommerce/wishlist',
+    url: '/api/solidus/wishlist',
     method: 'GET',
   },
   async fetcher({ input: { customerId, includeProducts }, options, fetch }) {

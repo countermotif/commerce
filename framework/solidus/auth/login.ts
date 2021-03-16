@@ -53,7 +53,7 @@ async function login({
     }
   )
 
-  // Bigcommerce returns a Set-Cookie header with the auth cookie
+  // Solidus returns a Set-Cookie header with the auth cookie
   let cookie = res.headers.get('Set-Cookie')
 
   if (cookie && typeof cookie === 'string') {

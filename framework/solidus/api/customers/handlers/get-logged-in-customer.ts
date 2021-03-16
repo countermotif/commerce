@@ -20,7 +20,7 @@ const getLoggedInCustomer: CustomersHandlers['getLoggedInCustomer'] = async ({
   const token = encodeURIComponent(req.cookies[config.customerCookie])
 
   if (req.cookies[config.customerCookie]) {
-    const { data } = await config.fetch<any>(
+    const { data } = await config.fetch(
       getLoggedInCustomerQuery,
       undefined,
       {
