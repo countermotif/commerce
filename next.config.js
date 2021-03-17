@@ -7,7 +7,8 @@ const isShopify = commerce.provider === 'shopify'
 module.exports = withCommerceConfig({
   commerce,
   images: {
-    domains: ['localhost', 'amazing-store-ad-bibendum.herokuapp.com'],
+    loader: 'imgix',
+    path: process.env.SOLIDUS_IMAGES_HOST,
   },
   i18n: {
     locales: ['en-US', 'es'],
