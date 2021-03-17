@@ -125,10 +125,10 @@ export function normalizeCart(data: any): Cart {
 function normalizeLineItem(item: any): LineItem {
   const image_host = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? 'http://localhost:5555/' : 'https://amazing-store-ad-bibendum.herokuapp.com/' 
 
-  const array = item.variant?.optionValues?.edges || []
-  const uniqueOptionValues = Array.from(new Set(array.map(s => s.node.id)))
+  const optionValues = item.variant?.optionValues?.edges || []
+  const distinctOptionValues = Array.from(new Set(optionValues.map(s => s.node.id)))
     .map(id => {
-      return array.find(s => s.node.id === id)
+      return optionValues.find(s => s.node.id === id)
     })
 
   return {
@@ -148,7 +148,7 @@ function normalizeLineItem(item: any): LineItem {
       price: item.price,
       listPrice: item.price,
     },
-    options: uniqueOptionValues.map(({ node }: any) => normalizeOptionValues(node)),
+    options: distinctOptionValues.map(({ node }: any) => normalizeOptionValues(node)),
     path: item.variant.product.slug,
     discounts: [],
   }
