@@ -99,7 +99,6 @@ const CartItem = ({
           height={150}
           src={item.variant.image!.url}
           alt={item.variant.image!.altText}
-          unoptimized
         />
       </div>
       <div className="flex-1 flex flex-col text-base">
